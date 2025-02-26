@@ -1,5 +1,6 @@
 requiredPackages = c(
   'tidyverse' # must have
+  ,'bookdown'
   ,'DBI'
   ,'RPostgres'
 )

@@ -1,5 +1,5 @@
 # Rscript build.R
-setwd("~/Repositories/Pladias/documentationNew")
+# setwd("~/Repositories/Pladias/documentationNew")
 # getwd()
 source("scripts/01_packages.R")
 
