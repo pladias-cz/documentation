@@ -169,7 +169,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">3.1</span> Base query that imitates the GUI search form results<a href="base-query-that-imitates-the-gui-search-form-results.html#base-query-that-imitates-the-gui-search-form-results" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb1-1"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-1" tabindex="-1"></a><span class="kw">SELECT</span></span>
 <span id="cb1-2"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-2" tabindex="-1"></a>    records.<span class="kw">id</span> <span class="kw">AS</span> <span class="kw">id</span>,</span>
-<span id="cb1-3"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-3" tabindex="-1"></a>    taxons.name_lat <span class="kw">AS</span> jmeno_stand,</span>
+<span id="cb1-3"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-3" tabindex="-1"></a>    taxons_clear.name_lat <span class="kw">AS</span> jmeno_stand,</span>
 <span id="cb1-4"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-4" tabindex="-1"></a>    records.original_name <span class="kw">AS</span> jmeno_orig,</span>
 <span id="cb1-5"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-5" tabindex="-1"></a>    records.locality <span class="kw">AS</span> lokalita,</span>
 <span id="cb1-6"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-6" tabindex="-1"></a>    records.nearest_town_text <span class="kw">AS</span> nejblizsi_obec,</span>
@@ -207,24 +207,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-38"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-38" tabindex="-1"></a>        <span class="kw">WHERE</span> records_id <span class="op">=</span> records.<span class="kw">id</span>) <span class="kw">AS</span> herbar,</span>
 <span id="cb1-39"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-39" tabindex="-1"></a>    phytochorions.phyto_id <span class="op">||</span> <span class="st">&#39;. &#39;</span> <span class="op">||</span> phytochorions.name <span class="kw">AS</span> fytochorion,</span>
 <span id="cb1-40"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-40" tabindex="-1"></a>    (</span>
-<span id="cb1-41"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-41" tabindex="-1"></a>        <span class="kw">SELECT</span> STRING_AGG(quadrants_full.code, <span class="st">&#39;; &#39;</span>)</span>
-<span id="cb1-42"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-42" tabindex="-1"></a>        <span class="kw">FROM</span> atlas.records_quadrants</span>
-<span id="cb1-43"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-43" tabindex="-1"></a>            <span class="kw">INNER</span> <span class="kw">JOIN</span> geodata.quadrants_full <span class="kw">ON</span> quadrants_full.<span class="kw">id</span> <span class="op">=</span> records_quadrants.quadrants_id</span>
-<span id="cb1-44"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-44" tabindex="-1"></a>        <span class="kw">WHERE</span> records_id <span class="op">=</span> records.<span class="kw">id</span>) <span class="kw">AS</span> kvadrant,</span>
-<span id="cb1-45"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-45" tabindex="-1"></a>    records.<span class="kw">comment</span> <span class="kw">AS</span> poznamka,</span>
-<span id="cb1-46"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-46" tabindex="-1"></a>    record_validation_status.description <span class="kw">AS</span> validacni_status,</span>
-<span id="cb1-47"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-47" tabindex="-1"></a>    record_originality_status.name_cz <span class="kw">AS</span> originalita,</span>
-<span id="cb1-48"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-48" tabindex="-1"></a>    projects.name <span class="kw">AS</span> projekt,</span>
-<span id="cb1-49"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-49" tabindex="-1"></a>    records.original_id <span class="kw">AS</span> externi_id,</span>
-<span id="cb1-50"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-50" tabindex="-1"></a>    licenses.<span class="kw">key</span> <span class="kw">AS</span> licence</span>
-<span id="cb1-51"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-51" tabindex="-1"></a><span class="kw">FROM</span> atlas.records</span>
-<span id="cb1-52"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-52" tabindex="-1"></a>    <span class="kw">LEFT</span> <span class="kw">JOIN</span> <span class="kw">public</span>.taxons <span class="kw">on</span> records.taxon_id <span class="op">=</span> taxons.<span class="kw">id</span></span>
-<span id="cb1-53"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-53" tabindex="-1"></a>    <span class="kw">LEFT</span> <span class="kw">JOIN</span> geodata.districts <span class="kw">on</span> records.district_id <span class="op">=</span> districts.<span class="kw">id</span></span>
-<span id="cb1-54"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-54" tabindex="-1"></a>    <span class="kw">LEFT</span> <span class="kw">JOIN</span> geodata.phytochorions <span class="kw">on</span> records.phytochorion_id <span class="op">=</span> phytochorions.<span class="dt">rowid</span></span>
-<span id="cb1-55"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-55" tabindex="-1"></a>    <span class="kw">LEFT</span> <span class="kw">JOIN</span> atlas.record_validation_status <span class="kw">on</span> records.validation_status <span class="op">=</span> record_validation_status.<span class="kw">id</span></span>
-<span id="cb1-56"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-56" tabindex="-1"></a>    <span class="kw">LEFT</span> <span class="kw">JOIN</span> atlas.record_originality_status <span class="kw">on</span> records.originality_id <span class="op">=</span> record_originality_status.<span class="kw">id</span></span>
-<span id="cb1-57"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-57" tabindex="-1"></a>    <span class="kw">LEFT</span> <span class="kw">JOIN</span> atlas.projects <span class="kw">on</span> records.project_id <span class="op">=</span> projects.<span class="kw">id</span></span>
-<span id="cb1-58"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-58" tabindex="-1"></a>    <span class="kw">LEFT</span> <span class="kw">JOIN</span> <span class="kw">public</span>.licenses <span class="kw">on</span> records.license_id <span class="op">=</span> licenses.<span class="kw">id</span>;</span></code></pre></div>
+<span id="cb1-41"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-41" tabindex="-1"></a>        <span class="kw">SELECT</span> quadrants_full.code</span>
+<span id="cb1-42"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-42" tabindex="-1"></a>        <span class="kw">FROM</span> geodata.quadrants_full</span>
+<span id="cb1-43"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-43" tabindex="-1"></a>        <span class="kw">WHERE</span> st_within(records.coords_wgs, quadrants_full.geom_wgs) <span class="kw">LIMIT</span> <span class="dv">1</span>) <span class="kw">AS</span> kvadrant,</span>
+<span id="cb1-44"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-44" tabindex="-1"></a>    records.<span class="kw">comment</span> <span class="kw">AS</span> poznamka,</span>
+<span id="cb1-45"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-45" tabindex="-1"></a>    record_validation_status.description <span class="kw">AS</span> validacni_status,</span>
+<span id="cb1-46"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-46" tabindex="-1"></a>    record_originality_status.name_cz <span class="kw">AS</span> originalita,</span>
+<span id="cb1-47"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-47" tabindex="-1"></a>    projects.name <span class="kw">AS</span> projekt,</span>
+<span id="cb1-48"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-48" tabindex="-1"></a>    records.original_id <span class="kw">AS</span> externi_id,</span>
+<span id="cb1-49"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-49" tabindex="-1"></a>    licenses.<span class="kw">key</span> <span class="kw">AS</span> licence</span>
+<span id="cb1-50"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-50" tabindex="-1"></a><span class="kw">FROM</span> atlas.records</span>
+<span id="cb1-51"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-51" tabindex="-1"></a>    <span class="kw">LEFT</span> <span class="kw">JOIN</span> <span class="kw">public</span>.taxons_clear <span class="kw">on</span> records.taxon_id <span class="op">=</span> taxons_clear.<span class="kw">id</span></span>
+<span id="cb1-52"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-52" tabindex="-1"></a>    <span class="kw">LEFT</span> <span class="kw">JOIN</span> geodata.districts <span class="kw">on</span> records.district_id <span class="op">=</span> districts.<span class="kw">id</span></span>
+<span id="cb1-53"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-53" tabindex="-1"></a>    <span class="kw">LEFT</span> <span class="kw">JOIN</span> geodata.phytochorions <span class="kw">on</span> records.phytochorion_id <span class="op">=</span> phytochorions.<span class="dt">rowid</span></span>
+<span id="cb1-54"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-54" tabindex="-1"></a>    <span class="kw">LEFT</span> <span class="kw">JOIN</span> atlas.record_validation_status <span class="kw">on</span> records.validation_status <span class="op">=</span> record_validation_status.<span class="kw">id</span></span>
+<span id="cb1-55"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-55" tabindex="-1"></a>    <span class="kw">LEFT</span> <span class="kw">JOIN</span> atlas.record_originality_status <span class="kw">on</span> records.originality_id <span class="op">=</span> record_originality_status.<span class="kw">id</span></span>
+<span id="cb1-56"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-56" tabindex="-1"></a>    <span class="kw">LEFT</span> <span class="kw">JOIN</span> atlas.projects <span class="kw">on</span> records.project_id <span class="op">=</span> projects.<span class="kw">id</span></span>
+<span id="cb1-57"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-57" tabindex="-1"></a>    <span class="kw">LEFT</span> <span class="kw">JOIN</span> <span class="kw">public</span>.licenses <span class="kw">on</span> records.license_id <span class="op">=</span> licenses.<span class="kw">id</span>;</span></code></pre></div>
 
 </div>
 <!-- </div> -->
@@ -248,42 +247,42 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
-"sharing": {
-"github": true,
-"facebook": false,
-"twitter": false,
-"linkedin": false,
-"weibo": false,
-"instapaper": false,
-"vk": false,
-"whatsapp": false,
-"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
-},
-"fontsettings": {
-"theme": "white",
-"family": "sans",
-"size": 2
-},
-"edit": null,
-"history": {
-"link": null,
-"text": null
-},
-"view": {
-"link": null,
-"text": null
-},
-"download": null,
-"search": {
-"engine": "fuse",
-"options": null
-},
-"toc": {
-"collapse": "subsection"
-},
-"toolbar": {
-"position": "static"
-}
+  "sharing": {
+    "github": true,
+    "facebook": false,
+    "twitter": false,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": null,
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  },
+  "toolbar": {
+    "position": "static"
+  }
 });
 });
 </script>

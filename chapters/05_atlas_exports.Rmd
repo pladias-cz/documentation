@@ -7,7 +7,7 @@
 ```sql
 SELECT
     records.id AS id,
-    taxons.name_lat AS jmeno_stand,
+    taxons_clear.name_lat AS jmeno_stand,
     records.original_name AS jmeno_orig,
     records.locality AS lokalita,
     records.nearest_town_text AS nejblizsi_obec,
@@ -45,10 +45,9 @@ SELECT
         WHERE records_id = records.id) AS herbar,
     phytochorions.phyto_id || '. ' || phytochorions.name AS fytochorion,
     (
-        SELECT STRING_AGG(quadrants_full.code, '; ')
-        FROM atlas.records_quadrants
-            INNER JOIN geodata.quadrants_full ON quadrants_full.id = records_quadrants.quadrants_id
-        WHERE records_id = records.id) AS kvadrant,
+        SELECT quadrants_full.code
+        FROM geodata.quadrants_full
+        WHERE st_within(records.coords_wgs, quadrants_full.geom_wgs) LIMIT 1) AS kvadrant,
     records.comment AS poznamka,
     record_validation_status.description AS validacni_status,
     record_originality_status.name_cz AS originalita,
@@ -56,7 +55,7 @@ SELECT
     records.original_id AS externi_id,
     licenses.key AS licence
 FROM atlas.records
-    LEFT JOIN public.taxons on records.taxon_id = taxons.id
+    LEFT JOIN public.taxons_clear on records.taxon_id = taxons_clear.id
     LEFT JOIN geodata.districts on records.district_id = districts.id
     LEFT JOIN geodata.phytochorions on records.phytochorion_id = phytochorions.rowid
     LEFT JOIN atlas.record_validation_status on records.validation_status = record_validation_status.id
