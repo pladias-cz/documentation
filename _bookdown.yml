@@ -5,6 +5,7 @@ output_dir: "./docs"
 rmd_files: [
     "index.Rmd",
     "chapters/01_introduction.Rmd",
+    "chapters/05_atlas_exports.Rmd",
 ]
 
 before_chapter_script: "scripts/0_common.R"

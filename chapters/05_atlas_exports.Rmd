@@ -1,0 +1,68 @@
+---
+---
+# Exports of occurrence data
+
+## Base query that imitates the GUI search form results
+
+```sql
+SELECT
+    records.id AS id,
+    taxons.name_lat AS jmeno_stand,
+    records.original_name AS jmeno_orig,
+    records.locality AS lokalita,
+    records.nearest_town_text AS nejblizsi_obec,
+    districts.name AS okres,
+    CASE
+        WHEN records.altitude_min IS NULL
+            THEN records.altitude_max::text
+        WHEN records.altitude_max IS NULL OR records.altitude_min = records.altitude_max
+            THEN records.altitude_min::text
+        ELSE records.altitude_min::text || '-' || records.altitude_max::text
+    END AS nadmorska_vyska,
+    records.latitude AS souradnice_lat,
+    records.longitude AS souradnice_lon,
+    records.gps_coords_source AS zdroj_souradnic,
+    records.gps_coords_precision AS presnost_souradnic,
+    CASE
+        WHEN records.datum_precision = 'Y'
+            THEN to_char(records.datum, 'YYYY')
+        WHEN records.datum_precision = 'M'
+            THEN to_char(records.datum, 'YYYY-MM')
+        ELSE to_char(records.datum, 'YYYY-MM-DD')
+    END AS datum,
+    (
+        SELECT STRING_AGG(CASE
+            WHEN name IS NULL OR name = '' THEN surname
+            ELSE name || ' ' || surname END, '; ' ORDER BY succession)
+        FROM atlas.records_authors
+            INNER JOIN atlas.authors ON authors.id = records_authors.authors_id
+        WHERE records_id = records.id) AS nalezce,
+    records.source as pramen,
+    (
+        SELECT STRING_AGG(herbariums.name, '; ')
+        FROM atlas.records_herbariums
+            INNER JOIN atlas.herbariums ON herbariums.id = records_herbariums.herbariums_id
+        WHERE records_id = records.id) AS herbar,
+    phytochorions.phyto_id || '. ' || phytochorions.name AS fytochorion,
+    (
+        SELECT STRING_AGG(quadrants_full.code, '; ')
+        FROM atlas.records_quadrants
+            INNER JOIN geodata.quadrants_full ON quadrants_full.id = records_quadrants.quadrants_id
+        WHERE records_id = records.id) AS kvadrant,
+    records.comment AS poznamka,
+    record_validation_status.description AS validacni_status,
+    record_originality_status.name_cz AS originalita,
+    projects.name AS projekt,
+    records.original_id AS externi_id,
+    licenses.key AS licence
+FROM atlas.records
+    LEFT JOIN public.taxons on records.taxon_id = taxons.id
+    LEFT JOIN geodata.districts on records.district_id = districts.id
+    LEFT JOIN geodata.phytochorions on records.phytochorion_id = phytochorions.rowid
+    LEFT JOIN atlas.record_validation_status on records.validation_status = record_validation_status.id
+    LEFT JOIN atlas.record_originality_status on records.originality_id = record_originality_status.id
+    LEFT JOIN atlas.projects on records.project_id = projects.id
+    LEFT JOIN public.licenses on records.license_id = licenses.id;
+```
+
+ 
