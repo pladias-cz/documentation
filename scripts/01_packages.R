@@ -1,5 +1,7 @@
 requiredPackages = c(
   'tidyverse' # must have
+  ,'DBI'
+  ,'RPostgres'
 )
 
 for (p in requiredPackages) {

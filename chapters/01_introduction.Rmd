@@ -1,9 +1,30 @@
 ---
 ---
 # Introduction
-```{r , include=FALSE}
+```{r, include=FALSE}
 # install packages
 source("scripts/01_packages.R")
 ```
 
- 
+```{r, include=FALSE}
+query <- "SELECT s.name, COUNT(*) FROM atlas.records r JOIN atlas.records_validation_status s ON (s.id=r.validation_status) GROUP BY s.id ORDER BY status"
+data <- dbGetQuery(db, query)
+
+data$status <- factor(data$status, levels = unique(data$status))
+```
+
+## Quantitative description of the database 
+**This information is valid for the date of build of this document.**
+
+```{r, include=FALSE}
+kable(data, caption = "Records count according to the status of validity")
+```
+
+```{r, include=FALSE}
+ggplot(data, aes(x = status, y = "count of records", fill = status)) +
+  geom_bar(stat = "identity") +
+  theme_minimal() +
+  labs(title = "Records count according to the status of validity",
+       x = "Status (called semafor)",
+       y = "Records count")
+```
