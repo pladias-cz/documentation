@@ -1,0 +1,13 @@
+book_filename: "pladias.cz"
+delete_merged_file: yes
+new_session: no
+output_dir: "./docs"
+rmd_files: [
+    "index.Rmd",
+    "chapters/01_introduction.Rmd",
+]
+
+before_chapter_script: "scripts/0_common.R"
+language:
+  ui:
+    chapter_name: "Chapter "

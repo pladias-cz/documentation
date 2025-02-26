@@ -1,0 +1,20 @@
+--- 
+title: "Pladias.cz documentation"
+author: "Pladias team"
+date: "`r Sys.Date()`"
+---
+# Intro
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = T, message = FALSE, out.width="90%", fig.height = 8, fig.width = 16)
+
+```
+
+This documentation is under develop, the priorities are:
+* make things public
+* enable semidynamic document (this must be build in local env with connection to local db)
+
+### to be done
+* everything
+
+[comment]: <> (https://stackoverflow.com/questions/50293383/bookdown-where-to-load-packages)

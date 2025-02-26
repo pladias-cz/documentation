@@ -1,0 +1,23 @@
+bookdown::gitbook:
+  lib_dir: assets
+  split_by: section
+  css: style.css
+  config:
+    toolbar:
+      position: static
+    edit: null
+    download: null
+    search: yes
+    fontsettings:
+      theme: white
+      family: sans
+      size: 2
+    sharing:
+      facebook: no
+      github: yes
+      twitter: no
+      linkedin: no
+      weibo: no
+      instapaper: no
+      vk: no
+      whatsapp: no
