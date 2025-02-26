@@ -6,15 +6,17 @@ date: "`r Sys.Date()`"
 # Intro
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, warning = T, message = FALSE, out.width="90%", fig.height = 8, fig.width = 16)
-
+knitr::opts_chunk$set(echo = FALSE, warning = T, message = FALSE, out.width="90%", fig.height = 6, fig.width = 10, dpi=60)
 ```
 
-This documentation is under develop, the priorities are:
-* make things public
-* enable semidynamic document (this must be build in local env with connection to local db)
+*Some concrete values (record counts, dictionary listings, etc.) are given in the document -- their value corresponds to the state of the database at the time of documentation generation.*
 
-### to be done
-* everything
+This documentation is under develop, the priorities are:
+
+* make things public
+
+**to be done**
+
+* nearly everything
 
 [comment]: <> (https://stackoverflow.com/questions/50293383/bookdown-where-to-load-packages)

@@ -1,30 +1,54 @@
 ---
 ---
-# Introduction
+# Basic facts about Pladias
 ```{r, include=FALSE}
 # install packages
 source("scripts/01_packages.R")
 ```
 
 ```{r, include=FALSE}
-query <- "SELECT s.name, COUNT(*) FROM atlas.records r JOIN atlas.records_validation_status s ON (s.id=r.validation_status) GROUP BY s.id ORDER BY status"
+query <- "SELECT s.description as name, s.color, COUNT(*) FROM atlas.records r JOIN atlas.record_validation_status s ON (s.id=r.validation_status) GROUP BY s.id ORDER BY s.priority DESC"
 data <- dbGetQuery(db, query)
 
-data$status <- factor(data$status, levels = unique(data$status))
+data$name <- factor(data$name, levels = unique(data$name))
 ```
 
-## Quantitative description of the database 
-**This information is valid for the date of build of this document.**
+## Quantitative description of the database
+```{r }
+table <- data %>%
+    mutate(
+    color_code = paste0("<span style='background-color:", color, ";'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>"),
+    count = format(count, big.mark = " ", decimal.mark = ","),
+    ) %>%
+    select(-color) %>%
+    kable("html", escape = F, caption = "Records count according to the status of validity") %>%
+    kable_styling(full_width = F)
 
-```{r, include=FALSE}
-kable(data, caption = "Records count according to the status of validity")
-```
-
-```{r, include=FALSE}
-ggplot(data, aes(x = status, y = "count of records", fill = status)) +
+plot <- ggplot(data, aes(x = name, y = count, fill = color)) +
   geom_bar(stat = "identity") +
   theme_minimal() +
+  scale_fill_identity() +
   labs(title = "Records count according to the status of validity",
        x = "Status (called semafor)",
-       y = "Records count")
+       y = "Records count") +
+   theme(
+       axis.text = element_text(size = 15),
+       axis.title = element_text(size = 16),
+       plot.title = element_text(size = 18, face = "bold")
+       )
 ```
+<div style="display: flex; justify-content: space-between;">
+<div style="width: 30%;">
+```{r }
+table
+```
+</div>
+<div style="width: 30%;">
+&nbsp;
+</div>
+<div>
+```{r }
+plot
+```
+</div>
+</div>

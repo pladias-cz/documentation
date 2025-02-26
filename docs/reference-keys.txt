@@ -1,5 +1,6 @@
+tab:unnamed-chunk-5
 intro
-to-be-done
-introduction
+basic-facts-about-pladias
+quantitative-description-of-the-database
 exports-of-occurrence-data
 base-query-that-imitates-the-gui-search-form-results
