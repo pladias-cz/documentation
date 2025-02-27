@@ -7,6 +7,8 @@ date: "`r Sys.Date()`"
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = T, message = FALSE, out.width="90%", fig.height = 6, fig.width = 10, dpi=60)
+
+source("scripts/01_packages.R")
 ```
 
 *Some concrete values (record counts, dictionary listings, etc.) are given in the document -- their value corresponds to the state of the database at the time of documentation generation.*

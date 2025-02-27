@@ -1,6 +1,10 @@
-tab:unnamed-chunk-5
+tab:unnamed-chunk-3
+tab:unnamed-chunk-4
 intro
 basic-facts-about-pladias
-quantitative-description-of-the-database
+trait-data
+occurrence-data
+validity-status
+native-status
 exports-of-occurrence-data
 base-query-that-imitates-the-gui-search-form-results

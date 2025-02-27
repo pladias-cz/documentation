@@ -1,20 +1,58 @@
 ---
 ---
 # Basic facts about Pladias
-```{r, include=FALSE}
-# install packages
-source("scripts/01_packages.R")
+
+**History**
+
+* project started on 2014, first launch 2016 - instance for vascular plants of the Czech Republic [Pladias](pladias.ibot.cas.cz)
+* 2019 new instance for nonvascular plants of the Czech Republic [DaLiBor](https://dalibor.ibot.cas.cz) 
+* 2021 new instance for vegetation traits (having no occurrence data included) [CEVS](https://cevs.ibot.cas.cz)
+* 2024 new instance for vascular plants of the Slovakia [Pladias.sk](https://pladias.sav.sk/)
+
+**Technology stack**
+
+* PostgreSQL + PostGIS + PostgREST
+* Java with Play! Framework
+* Geoserver
+
+**Misc**
+
+
+
+
+
+## Trait data
+
+TBD
+
+## Occurrence data
+The main amount of the records is comming from individual external data providers in the Czech Republic (Pladias as a secondary resource), only minority is imported to the Pladias as a primary storage. 
+
+```{r}
+query <- "WITH d AS (SELECT p.institution_id, p.name as project, COUNT(*) 
+                FROM atlas.records r 
+                JOIN atlas.projects p ON (p.id=r.project_id)                
+                GROUP BY p.id)
+                SELECT d.project, i.name, d.count FROM d JOIN  public.institutions i ON (i.id=d.institution_id)  ORDER BY d.count DESC"
+data <- dbGetQuery(db, query)
+
+data$project <- factor(data$project, levels = unique(data$project))
+ 
+data %>%
+    kable(caption = "Records insitutional origin") %>%
+    kable_styling(full_width = F)
 ```
 
+### Validity status
+For description of the record validity, a four-level classification is used (so called "semafor"). Using priority, the final interpretation of the occurrence status for taxon-quadrant is derived. 
+
+
 ```{r, include=FALSE}
-query <- "SELECT s.description as name, s.color, COUNT(*) FROM atlas.records r JOIN atlas.record_validation_status s ON (s.id=r.validation_status) GROUP BY s.id ORDER BY s.priority DESC"
+query <- "SELECT s.description as name, s.color, COUNT(*), s.priority FROM atlas.records r JOIN atlas.record_validation_status s ON (s.id=r.validation_status) GROUP BY s.id ORDER BY s.priority DESC"
 data <- dbGetQuery(db, query)
 
 data$name <- factor(data$name, levels = unique(data$name))
-```
-
-## Quantitative description of the database
-```{r }
+ 
 table <- data %>%
     mutate(
     color_code = paste0("<span style='background-color:", color, ";'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>"),
@@ -40,7 +78,7 @@ plot <- ggplot(data, aes(x = name, y = count, fill = color)) +
 <div style="display: flex; justify-content: space-between;">
 <div style="width: 30%;">
 ```{r }
-table
+    table
 ```
 </div>
 <div style="width: 30%;">
@@ -48,7 +86,9 @@ table
 </div>
 <div>
 ```{r }
-plot
+    plot
 ```
 </div>
 </div>
+
+### Native status

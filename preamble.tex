@@ -1,7 +1,10 @@
 \usepackage{booktabs}
 \usepackage[utf8]{inputenc}
 \usepackage[czech]{babel}
-% Select what to do with command \petr:
+% Select what to do with command \developers:
 \usepackage{xcolor}
-\newcommand{\developers}[1]{\textcolor{gray}{[#1]}} %for displaying developers texts
+
+% \newcommand{\developers}[1]{\textcolor{gray}{[#1]}} %for displaying developers texts in PDF output
+\newcommand{\developers}[1]{\texttt{\textless p style="color: gray"\textgreater}[#1]\texttt{\textless /p\textgreater}} % for HTML output
+
 %\newcommand{\developers}[1]{} %for hidding developers texts
