@@ -94,7 +94,7 @@ plot <- ggplot(data, aes(x = name, y = count, fill = color)) +
 ### Native status
 
 ```{r, include=FALSE}
-query <- "SELECT s.name_cz as name, COUNT(*), s.priority FROM atlas.records r JOIN atlas.record_originality_status s ON (s.id=r.originality_id) GROUP BY s.id ORDER BY s.priority DESC"
+query <- "SELECT s.name_cz as name, COUNT(*), s.priority FROM atlas.records r JOIN atlas.record_originality_status s ON (s.id=r.originality_id) GROUP BY s.id ORDER BY s.priority ASC"
 data <- dbGetQuery(db, query)
 
 data$name <- factor(data$name, levels = unique(data$name))
