@@ -1,10 +1,13 @@
 tab:unnamed-chunk-3
 tab:unnamed-chunk-4
+tab:unnamed-chunk-7
+tab:unnamed-chunk-10
 intro
 basic-facts-about-pladias
 trait-data
 occurrence-data
 validity-status
 native-status
+copyright
 exports-of-occurrence-data
 base-query-that-imitates-the-gui-search-form-results

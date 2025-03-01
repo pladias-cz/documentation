@@ -92,3 +92,82 @@ plot <- ggplot(data, aes(x = name, y = count, fill = color)) +
 </div>
 
 ### Native status
+
+```{r, include=FALSE}
+query <- "SELECT s.name_cz as name, COUNT(*), s.priority FROM atlas.records r JOIN atlas.record_originality_status s ON (s.id=r.originality_id) GROUP BY s.id ORDER BY s.priority DESC"
+data <- dbGetQuery(db, query)
+
+data$name <- factor(data$name, levels = unique(data$name))
+
+table <- data %>%
+    kable("html", escape = F, caption = "Records count according to the originality status") %>%
+    kable_styling(full_width = F)
+
+plot <- ggplot(data, aes(x = name, y = count)) +
+  geom_bar(stat = "identity") +
+  theme_minimal() +
+  scale_fill_identity() +
+  labs(title = "Records count according to the originality status",
+       x = "Status",
+       y = "Records count") +
+   theme(
+       axis.text = element_text(size = 15),
+       axis.title = element_text(size = 16),
+       plot.title = element_text(size = 18, face = "bold")
+       )
+```
+<div style="display: flex; justify-content: space-between;">
+<div style="width: 30%;">
+```{r }
+    table
+```
+</div>
+<div style="width: 30%;">
+&nbsp;
+</div>
+<div>
+```{r }
+    plot
+```
+</div>
+</div>
+
+### Copyright
+There are multiple record licence options available as shown in the table. In the near future, we will transfer P-P-P records to CC-BY-4.0.
+
+ ```{r, include=FALSE}
+
+query1 <- "SELECT * FROM public.licenses ORDER BY id DESC"
+data1 <- dbGetQuery(db, query1)
+
+table1 <- data1 %>%
+  kable(caption = "Licenses available") %>%
+  kable_styling(full_width = F)
+
+ query2 <- "SELECT l.key, l. description, COUNT(*)
+           FROM atlas.records r
+           JOIN public.licenses l ON (l.id=r.license_id)
+           GROUP BY l.id ORDER BY l.id DESC"
+ data2 <- dbGetQuery(db, query2)
+
+ table2 <- data2 %>%
+     kable(caption = "Usage of licenses") %>%
+     kable_styling(full_width = F)
+
+ ```
+
+<div style="display: flex; justify-content: space-between;">
+<div style="width: 70%;">
+```{r }
+    table1
+```
+</div>
+<div style="width: 40%;">
+&nbsp;
+</div>
+<div>
+```{r }
+    table2
+```
+</div>
+</div>
