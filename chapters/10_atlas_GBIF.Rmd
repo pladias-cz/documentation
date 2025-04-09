@@ -1,0 +1,12 @@
+---
+---
+# GBIF interactions
+Since 2025, we do show records exported from GBIF in the Pladias internal app, as an point marker accompanied with a link to the specimen info page.
+
+To get the data, we use this query:
+
+https://www.gbif.org/occurrence/search?has_coordinate=true&has_geospatial_issue=false&taxon_key=7707728&occurrence_status=present&geometry=POLYGON((11.83149%2051.29958,11.66493%2048.09954,19.16497%2048.09965,19.33152%2051.29969,14.64381%2051.29962,11.83149%2051.29958))
+
+
+**proposed changes**
+* exclude records having precision > 1000m

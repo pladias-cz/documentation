@@ -6,6 +6,7 @@ rmd_files: [
     "index.Rmd",
     "chapters/01_introduction.Rmd",
     "chapters/05_atlas_exports.Rmd",
+    "chapters/10_atlas_GBIF.Rmd",
 ]
 
 before_chapter_script: "scripts/0_common.R"
