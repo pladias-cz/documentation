@@ -3,10 +3,20 @@
 # GBIF interactions
 Since 2025, we do show records exported from GBIF in the Pladias internal app, as an point marker accompanied with a link to the specimen info page.
 
-To get the data, we use this query:
+To get the data, this query is used:
 
 https://www.gbif.org/occurrence/search?has_coordinate=true&has_geospatial_issue=false&taxon_key=7707728&occurrence_status=present&geometry=POLYGON((11.83149%2051.29958,11.66493%2048.09954,19.16497%2048.09965,19.33152%2051.29969,14.64381%2051.29962,11.83149%2051.29958))
 
 
 **proposed changes**
 * exclude records having precision > 1000m
+
+## Working with GBIF data outside of Pladias
+GBIF data is available in the Pladias database, but not everyone needs this access. Especially for analyses, it is necessary to be able to process an individual export from GBIF and be able to pair it to Pladias taxa using the stored mapping.
+
+A recipe for the OpenRefine tool is available for this purpose:
+1) start OpenRefine; for Docker users simply (without data persistency) ```docker run -d -it -p 3333:3333 -e REFINE_MEMORY=8G abesesr/openrefine```, for others please see https://openrefine.org/docs/manual/installing
+2) get data from GBIF in DarwinCore format (the "simple" format can not be used as the taxa mapping is done on original names, not on names interpreted by the Taxonomy Backbone), extract the zip file and take the file occurrence.txt
+2) visit http://127.0.0.1:3333/ and upload the file
+3) "create project", that is check and confirm the data were loaded correctly (check "tabs (TSV)" is selected as a column separator + "Attempt to parse cell text into numbers" is also checked).
+4) switch to Undo/Redo tab and press Apply. When this JSON file is uploaded, the OpenRefine will produce a new column "PladiasId" at the very beginning of the matrix. The data are resolved via API, please be patient.
