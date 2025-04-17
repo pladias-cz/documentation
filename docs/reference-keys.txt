@@ -11,3 +11,5 @@ native-status
 copyright
 exports-of-occurrence-data
 base-query-that-imitates-the-gui-search-form-results
+gbif-interactions
+working-with-gbif-data-outside-of-pladias

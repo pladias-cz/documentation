@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>2.2 Occurrence data | Pladias.cz documentation</title>
   <meta name="description" content="2.2 Occurrence data | Pladias.cz documentation" />
-  <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
 
   <meta property="og:title" content="2.2 Occurrence data | Pladias.cz documentation" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Pladias team" />
 
 
-<meta name="date" content="2025-03-01" />
+<meta name="date" content="2025-04-17" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -154,6 +154,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="3.1" data-path="base-query-that-imitates-the-gui-search-form-results.html"><a href="base-query-that-imitates-the-gui-search-form-results.html"><i class="fa fa-check"></i><b>3.1</b> Base query that imitates the GUI search form results</a></li>
 </ul></li>
+<li class="chapter" data-level="4" data-path="gbif-interactions.html"><a href="gbif-interactions.html"><i class="fa fa-check"></i><b>4</b> GBIF interactions</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="working-with-gbif-data-outside-of-pladias.html"><a href="working-with-gbif-data-outside-of-pladias.html"><i class="fa fa-check"></i><b>4.1</b> Working with GBIF data outside of Pladias</a></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -244,7 +248,7 @@ Excerpce pro Atlas
 Botanický ústav AV ČR, v. v. i.
 </td>
 <td style="text-align:right;">
-943600
+954352
 </td>
 </tr>
 <tr>
@@ -304,6 +308,17 @@ Zdeňka Lososová
 </tr>
 <tr>
 <td style="text-align:left;">
+Excerpce floristické literatury
+</td>
+<td style="text-align:left;">
+Zdeněk Kaplan
+</td>
+<td style="text-align:right;">
+67457
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
 Nálezová databáze Moravskoslezské pobočky ČBS
 </td>
 <td style="text-align:left;">
@@ -311,17 +326,6 @@ Moravskoslezská pobočka ČBS
 </td>
 <td style="text-align:right;">
 65517
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Excerpce floristické literatury
-</td>
-<td style="text-align:left;">
-Zdeněk Kaplan
-</td>
-<td style="text-align:right;">
-65136
 </td>
 </tr>
 <tr>
@@ -376,7 +380,7 @@ Flóra Šumavy
 Milan Štech
 </td>
 <td style="text-align:right;">
-21638
+21665
 </td>
 </tr>
 </tbody>
@@ -412,7 +416,7 @@ color_code
 Přijatý záznam
 </td>
 <td style="text-align:left;">
-1075762
+1082996
 </td>
 <td style="text-align:right;">
 3
@@ -426,7 +430,7 @@ Přijatý záznam
 Nejistý záznam
 </td>
 <td style="text-align:left;">
-66794
+67097
 </td>
 <td style="text-align:right;">
 2
@@ -440,7 +444,7 @@ Nejistý záznam
 Odmítnutý záznam
 </td>
 <td style="text-align:left;">
-16971
+17181
 </td>
 <td style="text-align:right;">
 1
@@ -454,7 +458,7 @@ Odmítnutý záznam
 Nerevidovaný záznam
 </td>
 <td style="text-align:left;">
-13042635
+13047988
 </td>
 <td style="text-align:right;">
 0
@@ -501,7 +505,7 @@ priority
 původní
 </td>
 <td style="text-align:right;">
-13637
+13633
 </td>
 <td style="text-align:right;">
 1
@@ -512,7 +516,7 @@ původní
 nepůvodní
 </td>
 <td style="text-align:right;">
-6706
+6724
 </td>
 <td style="text-align:right;">
 2
@@ -523,7 +527,7 @@ nepůvodní
 pěstovaný
 </td>
 <td style="text-align:right;">
-3252
+3291
 </td>
 <td style="text-align:right;">
 3
@@ -534,7 +538,7 @@ pěstovaný
 neurčeno
 </td>
 <td style="text-align:right;">
-14178567
+14191614
 </td>
 <td style="text-align:right;">
 4
@@ -673,7 +677,7 @@ CC-BY
 Creative Commons — Attribution 4.0 International
 </td>
 <td style="text-align:right;">
-47216
+47551
 </td>
 </tr>
 <tr>
@@ -695,7 +699,7 @@ P-P-P
 poskytovat záznamy třetím stranám a zveřejnit na webu
 </td>
 <td style="text-align:right;">
-14154918
+14167683
 </td>
 </tr>
 </tbody>
@@ -726,42 +730,42 @@ poskytovat záznamy třetím stranám a zveřejnit na webu
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
-"sharing": {
-"github": true,
-"facebook": false,
-"twitter": false,
-"linkedin": false,
-"weibo": false,
-"instapaper": false,
-"vk": false,
-"whatsapp": false,
-"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
-},
-"fontsettings": {
-"theme": "white",
-"family": "sans",
-"size": 2
-},
-"edit": null,
-"history": {
-"link": null,
-"text": null
-},
-"view": {
-"link": null,
-"text": null
-},
-"download": null,
-"search": {
-"engine": "fuse",
-"options": null
-},
-"toc": {
-"collapse": "subsection"
-},
-"toolbar": {
-"position": "static"
-}
+  "sharing": {
+    "github": true,
+    "facebook": false,
+    "twitter": false,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": null,
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  },
+  "toolbar": {
+    "position": "static"
+  }
 });
 });
 </script>

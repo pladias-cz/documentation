@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Pladias.cz documentation</title>
-  <meta name="description" content="Pladias.cz documentation" />
+  <title>Chapter 4 GBIF interactions | Pladias.cz documentation</title>
+  <meta name="description" content="Chapter 4 GBIF interactions | Pladias.cz documentation" />
   <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Pladias.cz documentation" />
+  <meta property="og:title" content="Chapter 4 GBIF interactions | Pladias.cz documentation" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Pladias.cz documentation" />
+  <meta name="twitter:title" content="Chapter 4 GBIF interactions | Pladias.cz documentation" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="basic-facts-about-pladias.html"/>
+<link rel="prev" href="base-query-that-imitates-the-gui-search-form-results.html"/>
+<link rel="next" href="working-with-gbif-data-outside-of-pladias.html"/>
 <script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -175,31 +175,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Pladias.cz documentation</h1>
-<p class="author"><em>Pladias team</em></p>
-<p class="date"><em>2025-04-17</em></p>
-</div>
-<div id="intro" class="section level1 hasAnchor" number="1">
-<h1><span class="header-section-number">Chapter 1</span> Intro<a href="index.html#intro" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p><em>Some concrete values (record counts, dictionary listings, etc.) are given in the document – their value corresponds to the state of the database at the time of documentation generation.</em></p>
-<p>This documentation is under develop, the priorities are:</p>
-<ul>
-<li>make things public</li>
-</ul>
-<p><strong>to be done</strong></p>
-<ul>
-<li>nearly everything</li>
-</ul>
-
+<div id="gbif-interactions" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">Chapter 4</span> GBIF interactions<a href="gbif-interactions.html#gbif-interactions" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Since 2025, we do show records exported from GBIF in the Pladias internal app, as an point marker accompanied with a link to the specimen info page.</p>
+<p>To get the data, this query is used:</p>
+<p><a href="https://www.gbif.org/occurrence/search?has_coordinate=true&amp;has_geospatial_issue=false&amp;taxon_key=7707728&amp;occurrence_status=present&amp;geometry=POLYGON" class="uri">https://www.gbif.org/occurrence/search?has_coordinate=true&amp;has_geospatial_issue=false&amp;taxon_key=7707728&amp;occurrence_status=present&amp;geometry=POLYGON</a>((11.83149%2051.29958,11.66493%2048.09954,19.16497%2048.09965,19.33152%2051.29969,14.64381%2051.29962,11.83149%2051.29958))</p>
+<p><strong>proposed changes</strong>
+* exclude records having precision &gt; 1000m</p>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="basic-facts-about-pladias.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="base-query-that-imitates-the-gui-search-form-results.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="working-with-gbif-data-outside-of-pladias.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="assets/gitbook-2.6.7/js/app.min.js"></script>

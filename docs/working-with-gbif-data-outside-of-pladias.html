@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Pladias.cz documentation</title>
-  <meta name="description" content="Pladias.cz documentation" />
+  <title>4.1 Working with GBIF data outside of Pladias | Pladias.cz documentation</title>
+  <meta name="description" content="4.1 Working with GBIF data outside of Pladias | Pladias.cz documentation" />
   <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Pladias.cz documentation" />
+  <meta property="og:title" content="4.1 Working with GBIF data outside of Pladias | Pladias.cz documentation" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Pladias.cz documentation" />
+  <meta name="twitter:title" content="4.1 Working with GBIF data outside of Pladias | Pladias.cz documentation" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
+<link rel="prev" href="gbif-interactions.html"/>
 
-<link rel="next" href="basic-facts-about-pladias.html"/>
 <script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -175,31 +175,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Pladias.cz documentation</h1>
-<p class="author"><em>Pladias team</em></p>
-<p class="date"><em>2025-04-17</em></p>
-</div>
-<div id="intro" class="section level1 hasAnchor" number="1">
-<h1><span class="header-section-number">Chapter 1</span> Intro<a href="index.html#intro" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p><em>Some concrete values (record counts, dictionary listings, etc.) are given in the document – their value corresponds to the state of the database at the time of documentation generation.</em></p>
-<p>This documentation is under develop, the priorities are:</p>
-<ul>
-<li>make things public</li>
-</ul>
-<p><strong>to be done</strong></p>
-<ul>
-<li>nearly everything</li>
-</ul>
+<div id="working-with-gbif-data-outside-of-pladias" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> Working with GBIF data outside of Pladias<a href="working-with-gbif-data-outside-of-pladias.html#working-with-gbif-data-outside-of-pladias" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>GBIF data is available in the Pladias database, but not everyone needs this access. Especially for analyses, it is necessary to be able to process an individual export from GBIF and be able to pair it to Pladias taxa using the stored mapping.</p>
+<p>A recipe for the OpenRefine tool is available for this purpose:
+1) start OpenRefine; for Docker users simply (without data persistency) <code>docker run -d -it -p 3333:3333 -e REFINE_MEMORY=8G abesesr/openrefine</code>, for others please see <a href="https://openrefine.org/docs/manual/installing" class="uri">https://openrefine.org/docs/manual/installing</a>
+2) get data from GBIF in DarwinCore format (the “simple” format can not be used as the taxa mapping is done on original names, not on names interpreted by the Taxonomy Backbone), extract the zip file and take the file occurrence.txt
+2) visit <a href="http://127.0.0.1:3333/" class="uri">http://127.0.0.1:3333/</a> and upload the file
+3) “create project”, that is check and confirm the data were loaded correctly (check “tabs (TSV)” is selected as a column separator + “Attempt to parse cell text into numbers” is also checked).
+4) switch to Undo/Redo tab and press Apply. When this JSON file is uploaded, the OpenRefine will produce a new column “PladiasId” at the very beginning of the matrix. The data are resolved via API, please be patient.</p>
 
 </div>
+<!-- </div> -->
             </section>
 
           </div>
         </div>
       </div>
+<a href="gbif-interactions.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
-<a href="basic-facts-about-pladias.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="assets/gitbook-2.6.7/js/app.min.js"></script>
