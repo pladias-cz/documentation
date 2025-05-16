@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 4 GBIF interactions | Pladias.cz documentation</title>
   <meta name="description" content="Chapter 4 GBIF interactions | Pladias.cz documentation" />
-  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 4 GBIF interactions | Pladias.cz documentation" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Pladias team" />
 
 
-<meta name="date" content="2025-04-17" />
+<meta name="date" content="2025-05-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,7 +32,7 @@
   
 <link rel="prev" href="base-query-that-imitates-the-gui-search-form-results.html"/>
 <link rel="next" href="working-with-gbif-data-outside-of-pladias.html"/>
-<script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="assets/jquery-3.6.1/jquery-3.6.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -179,9 +179,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Chapter 4</span> GBIF interactions<a href="gbif-interactions.html#gbif-interactions" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>Since 2025, we do show records exported from GBIF in the Pladias internal app, as an point marker accompanied with a link to the specimen info page.</p>
 <p>To get the data, this query is used:</p>
-<p><a href="https://www.gbif.org/occurrence/search?has_coordinate=true&amp;has_geospatial_issue=false&amp;taxon_key=7707728&amp;occurrence_status=present&amp;geometry=POLYGON" class="uri">https://www.gbif.org/occurrence/search?has_coordinate=true&amp;has_geospatial_issue=false&amp;taxon_key=7707728&amp;occurrence_status=present&amp;geometry=POLYGON</a>((11.83149%2051.29958,11.66493%2048.09954,19.16497%2048.09965,19.33152%2051.29969,14.64381%2051.29962,11.83149%2051.29958))</p>
-<p><strong>proposed changes</strong>
-* exclude records having precision &gt; 1000m</p>
+<p><a href="https://www.gbif.org/occurrence/search?has_coordinate=true&amp;has_geospatial_issue=false&amp;taxon_key=7707728&amp;occurrence_status=present&amp;geometry=POLYGON((11.83149%2051.29958,11.66493%2048.09954,19.16497%2048.09965,19.33152%2051.29969,14.64381%2051.29962,11.83149%2051.29958))">https://www.gbif.org/occurrence/search?has_coordinate=true&amp;has_geospatial_issue=false&amp;taxon_key=7707728&amp;occurrence_status=present&amp;geometry=POLYGON((11.83149%2051.29958,11.66493%2048.09954,19.16497%2048.09965,19.33152%2051.29969,14.64381%2051.29962,11.83149%2051.29958))</a></p>
+<p><strong>proposed changes</strong></p>
+<ul>
+<li>exclude records having precision &gt; 1000m</li>
+</ul>
 </div>
             </section>
 
