@@ -64,4 +64,19 @@ FROM atlas.records
     LEFT JOIN public.licenses on records.license_id = licenses.id;
 ```
 
- 
+## occurrence status including aggregated descendant taxa (parent_id is the taxon to be reported, inlcuding records linked to itself + all descendant taxa)
+```sql
+SELECT m.quadrant_name,
+        (SELECT id FROM atlas.record_validation_status WHERE priority=max(status.priority) LIMIT 1) AS max_valid_status,
+	   tree.parent_id as pladias_id
+
+FROM public_web.m_plants_distribution m ,
+     atlas.record_validation_status status,
+	 public.m_descendant_taxons tree
+
+WHERE tree.descendant_id = m.taxon_id
+    AND m.validation_status=status.id
+
+GROUP BY m.quadrant_name, tree.parent_id
+
+```
