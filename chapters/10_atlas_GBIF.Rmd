@@ -112,9 +112,11 @@ A recipe for the OpenRefine tool is available for this purpose:
 ]
 ```
 
-## How is gbif IMPORT done @admin
+## How is gbif IMPORT done by @admin
 1) visit the link of the GBIF filter + download as a taxonList and as Simple
-2) using the taxonList export, add new taxa into the convertor or update their info:
+2) using the taxonList export, add new taxa into the convertor or update their info 
+    - filter out names with less than 20 occurrences to reduce it a little bit..
+    - use the Excel formula, that is prepared to be in the first, newly pasted column
    ```
    ="INSERT INTO gbif.taxa (taxon_key, scientific_name, accepted_taxon_key, accepted_scientific_name, taxon_rank, species, species_key)
    VALUES
@@ -138,7 +140,8 @@ A recipe for the OpenRefine tool is available for this purpose:
       TRUNCATE TABLE gbif.records RESTART IDENTITY;
     ```
 4) import records from Simple via admin.pladias.cz Console ```bin/console gbif:importRecords```
-5) remove records those are not mapped```sql DELETE FROM gbif.records r WHERE NOT EXISTS (SELECT 1 FROM gbif.taxa t WHERE t.taxon_key = r.taxon_key) ```
+5) remove records those are not mapped ```sql DELETE FROM gbif.records r WHERE NOT EXISTS (SELECT 1 FROM gbif.taxa t WHERE t.taxon_key = r.taxon_key); ```
+6) remove records with precision  > 1000 ```sql DELETE FROM gbif.records r WHERE coords_precision > 1000; ```
 6) restore indexes
     ```sql
    ALTER TABLE IF EXISTS gbif.records
