@@ -12,6 +12,8 @@ To get the data, this query is used:
 
 * exclude records having precision > 1000m
 
+Date of GBIF export: GBIF.org (11 September 2025) GBIF Occurrence Download https://doi.org/10.15468/dl.cperjf
+
 ## Working with GBIF data outside of Pladias
 GBIF data is available in the Pladias database, but not everyone needs this access. Especially for analyses, it is necessary to be able to process an individual export from GBIF and be able to pair it to Pladias taxa using the stored mapping.
 
@@ -109,3 +111,59 @@ A recipe for the OpenRefine tool is available for this purpose:
   }
 ]
 ```
+
+## How is gbif IMPORT done @admin
+1) visit the link of the GBIF filter + download as a taxonList and as Simple
+2) using the taxonList export, add new taxa into the convertor or update their info:
+   ```
+   ="INSERT INTO gbif.taxa (taxon_key, scientific_name, accepted_taxon_key, accepted_scientific_name, taxon_rank, species, species_key)
+   VALUES
+   ("&B2&",'"&C2&"',"&D2&",'"&E2&"','"&G2&"','"&U2&"',"&V2&"),
+   ON CONFLICT (taxon_key)
+   DO UPDATE SET
+    accepted_taxon_key = EXCLUDED.accepted_taxon_key,
+    accepted_scientific_name = EXCLUDED.accepted_scientific_name,
+    taxon_rank = EXCLUDED.taxon_rank,
+    species = EXCLUDED.species,
+    species_key = EXCLUDED.species_key
+    ;"
+   ```
+3) cleanup & truncate table:
+    ```sql
+     ALTER TABLE IF EXISTS gbif.records DROP CONSTRAINT IF EXISTS gbif_records_taxon_fkey;
+      DROP INDEX IF EXISTS gbif.gbif_records_coords_idx;
+      DROP INDEX IF EXISTS gbif.gbif_records_taxon_key_idx;
+      DROP INDEX IF EXISTS gbif.gbif_records_year_idx;
+      DROP INDEX IF EXISTS gbif.records_institution_code_idx;
+      TRUNCATE TABLE gbif.records RESTART IDENTITY;
+    ```
+4) import records from Simple via admin.pladias.cz Console ```bin/console gbif:importRecords```
+5) remove records those are not mapped```sql DELETE FROM gbif.records r WHERE NOT EXISTS (SELECT 1 FROM gbif.taxa t WHERE t.taxon_key = r.taxon_key) ```
+6) restore indexes
+    ```sql
+   ALTER TABLE IF EXISTS gbif.records
+   ADD CONSTRAINT gbif_records_taxon_fkey FOREIGN KEY (taxon_key)
+   REFERENCES gbif.taxa (taxon_key) MATCH SIMPLE
+   ON UPDATE NO ACTION
+   ON DELETE CASCADE;
+
+   CREATE INDEX IF NOT EXISTS gbif_records_coords_idx
+   ON gbif.records USING gist
+   (coords)
+   TABLESPACE pg_default;
+
+   CREATE INDEX IF NOT EXISTS gbif_records_taxon_key_idx
+   ON gbif.records USING btree
+   (taxon_key ASC NULLS LAST)
+   TABLESPACE pg_default;
+
+   CREATE INDEX IF NOT EXISTS gbif_records_year_idx
+   ON gbif.records USING btree
+   (year ASC NULLS LAST)
+   TABLESPACE pg_default;
+
+   CREATE INDEX IF NOT EXISTS records_institution_code_idx
+   ON gbif.records USING btree
+   (institution_code COLLATE pg_catalog."default" ASC NULLS LAST)
+   TABLESPACE pg_default;
+    ```
