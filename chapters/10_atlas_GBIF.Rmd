@@ -116,11 +116,13 @@ A recipe for the OpenRefine tool is available for this purpose:
 1) visit the link of the GBIF filter + download as a taxonList and as Simple
 2) using the taxonList export, add new taxa into the convertor or update their info 
     - filter out names with less than 20 occurrences to reduce it a little bit..
+    - replace all ' with ''
+    - fill NULL in V column empty cells
     - use the Excel formula, that is prepared to be in the first, newly pasted column
    ```
    ="INSERT INTO gbif.taxa (taxon_key, scientific_name, accepted_taxon_key, accepted_scientific_name, taxon_rank, species, species_key)
    VALUES
-   ("&B2&",'"&C2&"',"&D2&",'"&E2&"','"&G2&"','"&U2&"',"&V2&"),
+   ("&B2&",'"&C2&"',"&D2&",'"&E2&"','"&G2&"','"&U2&"',"&V2&")
    ON CONFLICT (taxon_key)
    DO UPDATE SET
     accepted_taxon_key = EXCLUDED.accepted_taxon_key,
@@ -139,7 +141,7 @@ A recipe for the OpenRefine tool is available for this purpose:
       DROP INDEX IF EXISTS gbif.records_institution_code_idx;
       TRUNCATE TABLE gbif.records RESTART IDENTITY;
     ```
-4) import records from Simple via admin.pladias.cz Console ```bin/console gbif:importRecords```
+4) upload occurrences from Simple on megastroj, import records.csv via admin.pladias.cz Console ``` docker exec management_php bin/console gbif:importRecords```
 5) remove records those are not mapped ```sql DELETE FROM gbif.records r WHERE NOT EXISTS (SELECT 1 FROM gbif.taxa t WHERE t.taxon_key = r.taxon_key); ```
 6) remove records with precision  > 1000 ```sql DELETE FROM gbif.records r WHERE coords_precision > 1000; ```
 6) restore indexes
