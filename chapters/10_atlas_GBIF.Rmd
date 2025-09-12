@@ -141,7 +141,7 @@ A recipe for the OpenRefine tool is available for this purpose:
       DROP INDEX IF EXISTS gbif.records_institution_code_idx;
       TRUNCATE TABLE gbif.records RESTART IDENTITY;
     ```
-4) upload occurrences from Simple on megastroj, import records.csv via admin.pladias.cz Console ``` docker exec management_php bin/console gbif:importRecords```
+4) upload occurrences from Simple on megastroj, import records.csv via admin.pladias.cz Console ``` docker exec management_php bin/console gbif:importRecords  docker exec adminpladiascz-app-1 bin/console gbif:importRecords```
 5) remove records those are not mapped ```sql DELETE FROM gbif.records r WHERE NOT EXISTS (SELECT 1 FROM gbif.taxa t WHERE t.taxon_key = r.taxon_key); ```
 6) remove records with precision  > 1000 ```sql DELETE FROM gbif.records r WHERE coords_precision > 1000; ```
 6) restore indexes
