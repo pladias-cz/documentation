@@ -1,0 +1,42 @@
+---
+---
+# Muzeum Roztoky
+analýza k možnosti předat upřesněné záznamy do lokálních muzeí. Při excerpcích je ale většinou ignorováno herbNr, tj. párování jen podle taxonu a pomocných údajů.
+
+
+## counts of records with/without original Id from the herbarium in the Pladias
+
+description	count	case
+Nejistý záznam	80	bez id
+Nerevidovaný záznam	203	bez id
+Nerevidovaný záznam	916	obsahuje original ID
+Odmítnutý záznam	7	bez id
+Odmítnutý záznam	3	obsahuje original ID
+Přijatý záznam	32702	bez id
+Přijatý záznam	1121	obsahuje original ID
+
+```sql
+SELECT
+    s.description,
+    COUNT(*) AS count,
+CASE
+        WHEN r.original_id IS NULL OR r.original_id = '' THEN 'bez id'
+        ELSE 'obsahuje original ID'
+    END
+FROM atlas.records r
+JOIN atlas.records_herbariums h ON h.records_id = r.id
+JOIN atlas.record_validation_status s ON s.id = r.validation_status
+WHERE h.herbariums_id = 169 -- Roztoky u Prahy
+GROUP BY
+    s.description,
+    CASE
+        WHEN r.original_id IS NULL OR r.original_id = '' THEN 'bez id'
+        ELSE 'obsahuje original ID'
+    END
+order by description
+```
+
+## postup
+- export z BACH -> Excel
+- ./museumChecker ```cd museumChecker && pyenv install 3.12.2 && pyenv local 3.12.2 && poetry install && poetry run python check_values.py ```
+
