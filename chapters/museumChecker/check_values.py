@@ -29,6 +29,7 @@ JOIN atlas.records_authors rel_aut ON (rel_aut.records_id = r.id)
 JOIN atlas.authors a ON (a.id = rel_aut.authors_id)
 WHERE
 h.herbariums_id = 169 -- Roztoky
+AND r.original_id IS NULL
 AND t.name_lat = %s
 AND (
     a.name || ' ' || a.surname = %s
@@ -47,6 +48,7 @@ JOIN atlas.records_authors rel_aut ON (rel_aut.records_id = r.id)
 JOIN atlas.authors a ON (a.id = rel_aut.authors_id)
 WHERE
 h.herbariums_id = 169 -- Roztoky
+AND r.original_id IS NULL
 AND t.name_lat = %s
 AND r.datum = %s
 AND (
@@ -64,6 +66,7 @@ JOIN atlas.records_authors rel_aut ON (rel_aut.records_id = r.id)
 JOIN atlas.authors a ON (a.id = rel_aut.authors_id)
 WHERE
 h.herbariums_id = 169 -- Roztoky
+AND r.original_id IS NULL
 AND t.name_lat = %s
 AND (r.datum = %s
         OR
@@ -81,6 +84,7 @@ JOIN atlas.records_authors rel_aut ON (rel_aut.records_id = r.id)
 JOIN atlas.authors a ON (a.id = rel_aut.authors_id)
 WHERE
 h.herbariums_id = 169 -- Roztoky
+AND r.original_id IS NULL
 AND t.name_lat = %s
 AND r.locality LIKE %s
 AND (r.datum = %s
@@ -200,9 +204,9 @@ def main():
 
     df["shoda přímo v original_id"] = results_1
     df["collectorANDdatumANDlokalita"] = results_2
-    df["datumAND_collectorORlocalita_"] = results_3
+    df["datumAND[collectorORlocalita]"] = results_3
     df["datumORcollectorORlocalita"] = results_4
-    df["localitaOR_datumORcollector_"] = results_5
+    df["localitaOR[datumORcollector]"] = results_5
 
     print("💾 Ukládám výsledek do", OUTPUT_FILE)
     df.to_excel(OUTPUT_FILE, index=False)
