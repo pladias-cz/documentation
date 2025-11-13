@@ -37,7 +37,8 @@ AND (
     r.datum = %s
     AND
     r.locality LIKE %s
-    );
+    )
+    GROUP BY r.id;
 """
 
 SQL_QUERY_3 = """
@@ -55,7 +56,8 @@ AND (
         a.name || ' ' || a.surname = %s
         OR
         r.locality LIKE %s
-        );
+        )
+        GROUP BY r.id;
 """
 
 SQL_QUERY_4 = """
@@ -73,7 +75,8 @@ AND (r.datum = %s
         a.name || ' ' || a.surname = %s
         OR
         r.locality LIKE %s
-        );
+        )
+        GROUP BY r.id;
 """
 
 SQL_QUERY_5 = """
@@ -90,7 +93,8 @@ AND r.locality LIKE %s
 AND (r.datum = %s
         OR
         a.name || ' ' || a.surname = %s
-        );
+        )
+        GROUP BY r.id;
 """
 
 def safe_trim(value):
