@@ -114,7 +114,7 @@ A recipe for the OpenRefine tool is available for this purpose:
 
 ## How is gbif IMPORT done by @admin
 1) visit the link of the GBIF filter + download as a taxonList and as Simple
-2) using the taxonList export, add new taxa into the convertor or update their info 
+2) using the taxonList export (it has Tab as separator), add new taxa into the convertor or update their info 
     - filter out names with less than 20 occurrences to reduce it a little bit..
     - replace all ' with ''
     - fill NULL in V column empty cells
