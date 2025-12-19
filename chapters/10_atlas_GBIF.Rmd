@@ -9,7 +9,7 @@ To get the data, this query is used:
 
 - Date of GBIF export: GBIF.org (11 September 2025) GBIF Occurrence Download https://doi.org/10.15468/dl.cperjf
 - Date of GBIF export: GBIF.org (26 November 2025) GBIF Occurrence Download  https://doi.org/10.15468/dl.xamd2m
-- Date of GBIF export: GBIF.org (18 December 2025) GBIF Occurrence Download  
+- Date of GBIF export: GBIF.org (18 December 2025) GBIF Occurrence Download https://doi.org/10.15468/dl.pf96mm
 
 ## Working with GBIF data outside of Pladias
 GBIF data is available in the Pladias database, but not everyone needs this access. Especially for analyses, it is necessary to be able to process an individual export from GBIF and be able to pair it to Pladias taxa using the stored mapping.
