@@ -7,6 +7,8 @@ To get the data, this query is used:
 
 [link](https://www.gbif.org/occurrence/search?has_coordinate=true&has_geospatial_issue=false&taxon_key=7707728&occurrence_status=present&geometry=POLYGON((11.83149%2051.29958,11.66493%2048.09954,19.16497%2048.09965,19.33152%2051.29969,14.64381%2051.29962,11.83149%2051.29958))&coordinate_uncertainty_in_meters=0,1000)
 
+in case of only Zobodat data: dataset_key=857bce66-f762-11e1-a439-00145eb45e9a
+
 - Date of GBIF export: GBIF.org (11 September 2025) GBIF Occurrence Download https://doi.org/10.15468/dl.cperjf
 - Date of GBIF export: GBIF.org (26 November 2025) GBIF Occurrence Download  https://doi.org/10.15468/dl.xamd2m
 - Date of GBIF export: GBIF.org (18 December 2025) GBIF Occurrence Download https://doi.org/10.15468/dl.pf96mm
@@ -113,6 +115,7 @@ A recipe for the OpenRefine tool is available for this purpose:
 1) visit the link of the GBIF filter + download as a taxonList and as Simple
 2) using the taxonList export (it has Tab as separator), add new taxa into the convertor or update their info 
     - filter out names with less than 20 occurrences to reduce it a little bit..
+    - filter out FAMILY rank
     - replace all ' with ''
     - fill NULL in V column empty cells
     - use the Excel formula, that is prepared to be in the first, newly pasted column
@@ -138,9 +141,9 @@ A recipe for the OpenRefine tool is available for this purpose:
       DROP INDEX IF EXISTS gbif.records_institution_code_idx;
       TRUNCATE TABLE gbif.records RESTART IDENTITY;
     ```
-4) upload occurrences from Simple on megastroj, import records.csv via admin.pladias.cz Console ``` docker exec management_php bin/console gbif:importRecords  docker exec adminpladiascz-app-1 bin/console gbif:importRecords```
-5) remove records those are not mapped ```sql DELETE FROM gbif.records r WHERE NOT EXISTS (SELECT 1 FROM gbif.taxa t WHERE t.taxon_key = r.taxon_key); ```
-6) remove records with precision  > 1000 ```sql DELETE FROM gbif.records r WHERE coords_precision > 1000; ```
+4) upload occurrences from Simple on megastroj, import records.csv via admin.pladias.cz Console ``` nohup docker exec adminpladiascz-app-1 bin/console gbif:importRecords > output.log 2>&1 &```
+5) ??WHY?? remove records those are not mapped ```sql DELETE FROM gbif.records r WHERE NOT EXISTS (SELECT 1 FROM gbif.taxa t WHERE t.taxon_key = r.taxon_key); ```
+6) NOW PART OF THE GBIF EXPORT FILTER  remove records with precision  > 1000 ```sql DELETE FROM gbif.records r WHERE coords_precision > 1000; ```
 6) restore indexes
     ```sql
    ALTER TABLE IF EXISTS gbif.records
