@@ -142,8 +142,7 @@ A recipe for the OpenRefine tool is available for this purpose:
       TRUNCATE TABLE gbif.records RESTART IDENTITY;
     ```
 4) upload occurrences from Simple on megastroj, import records.csv via admin.pladias.cz Console ``` nohup docker exec adminpladiascz-app-1 bin/console gbif:importRecords > output.log 2>&1 &```
-5) ??WHY?? remove records those are not mapped ```sql DELETE FROM gbif.records r WHERE NOT EXISTS (SELECT 1 FROM gbif.taxa t WHERE t.taxon_key = r.taxon_key); ```
-6) NOW PART OF THE GBIF EXPORT FILTER  remove records with precision  > 1000 ```sql DELETE FROM gbif.records r WHERE coords_precision > 1000; ```
+5) due foreignKey remove records those are not mapped ```sql DELETE FROM gbif.records r WHERE NOT EXISTS (SELECT 1 FROM gbif.taxa t WHERE t.taxon_key = r.taxon_key); ```
 6) restore indexes
     ```sql
    ALTER TABLE IF EXISTS gbif.records
