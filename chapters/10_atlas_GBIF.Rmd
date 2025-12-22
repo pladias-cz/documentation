@@ -141,7 +141,7 @@ A recipe for the OpenRefine tool is available for this purpose:
       DROP INDEX IF EXISTS gbif.records_institution_code_idx;
       TRUNCATE TABLE gbif.records RESTART IDENTITY;
     ```
-4) upload occurrences from Simple on megastroj, import records.csv via admin.pladias.cz Console ``` nohup docker exec adminpladiascz-app-1 bin/console gbif:importRecords > output.log 2>&1 &```
+4) upload occurrences from Simple on megastroj, import records.csv via admin.pladias.cz Console ``` docker cp ./data/records.csv adminpladiascz-app-1:/srv/temp/data/records.csv   &&  nohup docker exec adminpladiascz-app-1 bin/console gbif:importRecords > output.log 2>&1 &```
 5) due foreignKey remove records those are not mapped ```sql DELETE FROM gbif.records r WHERE NOT EXISTS (SELECT 1 FROM gbif.taxa t WHERE t.taxon_key = r.taxon_key); ```
 6) restore indexes
     ```sql
