@@ -1,0 +1,17 @@
+tab:unnamed-chunk-3
+tab:unnamed-chunk-4
+tab:unnamed-chunk-7
+tab:unnamed-chunk-10
+intro
+basic-facts-about-pladias
+trait-data
+occurrence-data
+validity-status
+native-status
+copyright
+exports-of-occurrence-data
+base-query-that-imitates-the-gui-search-form-results
+occurrence-status-including-aggregated-descendant-taxa-parent_id-is-the-taxon-to-be-reported-inlcuding-records-linked-to-itself-all-descendant-taxa
+gbif-interactions
+working-with-gbif-data-outside-of-pladias
+how-is-gbif-import-done-by-admin

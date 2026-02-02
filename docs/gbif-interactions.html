@@ -23,14 +23,14 @@
 <meta name="author" content="Pladias team" />
 
 
-<meta name="date" content="2025-05-16" />
+<meta name="date" content="2026-02-02" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="base-query-that-imitates-the-gui-search-form-results.html"/>
+<link rel="prev" href="occurrence-status-including-aggregated-descendant-taxa-parent_id-is-the-taxon-to-be-reported-inlcuding-records-linked-to-itself-all-descendant-taxa.html"/>
 <link rel="next" href="working-with-gbif-data-outside-of-pladias.html"/>
 <script src="assets/jquery-3.6.1/jquery-3.6.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -153,10 +153,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="exports-of-occurrence-data.html"><a href="exports-of-occurrence-data.html"><i class="fa fa-check"></i><b>3</b> Exports of occurrence data</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="base-query-that-imitates-the-gui-search-form-results.html"><a href="base-query-that-imitates-the-gui-search-form-results.html"><i class="fa fa-check"></i><b>3.1</b> Base query that imitates the GUI search form results</a></li>
+<li class="chapter" data-level="3.2" data-path="occurrence-status-including-aggregated-descendant-taxa-parent_id-is-the-taxon-to-be-reported-inlcuding-records-linked-to-itself-all-descendant-taxa.html"><a href="occurrence-status-including-aggregated-descendant-taxa-parent_id-is-the-taxon-to-be-reported-inlcuding-records-linked-to-itself-all-descendant-taxa.html"><i class="fa fa-check"></i><b>3.2</b> occurrence status including aggregated descendant taxa (parent_id is the taxon to be reported, inlcuding records linked to itself + all descendant taxa)</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="gbif-interactions.html"><a href="gbif-interactions.html"><i class="fa fa-check"></i><b>4</b> GBIF interactions</a>
 <ul>
 <li class="chapter" data-level="4.1" data-path="working-with-gbif-data-outside-of-pladias.html"><a href="working-with-gbif-data-outside-of-pladias.html"><i class="fa fa-check"></i><b>4.1</b> Working with GBIF data outside of Pladias</a></li>
+<li class="chapter" data-level="4.2" data-path="how-is-gbif-import-done-by-admin.html"><a href="how-is-gbif-import-done-by-admin.html"><i class="fa fa-check"></i><b>4.2</b> How is gbif IMPORT done by <span class="citation">@admin</span></a></li>
 </ul></li>
 </ul>
 
@@ -179,10 +181,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Chapter 4</span> GBIF interactions<a href="gbif-interactions.html#gbif-interactions" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>Since 2025, we do show records exported from GBIF in the Pladias internal app, as an point marker accompanied with a link to the specimen info page.</p>
 <p>To get the data, this query is used:</p>
-<p><a href="https://www.gbif.org/occurrence/search?has_coordinate=true&amp;has_geospatial_issue=false&amp;taxon_key=7707728&amp;occurrence_status=present&amp;geometry=POLYGON((11.83149%2051.29958,11.66493%2048.09954,19.16497%2048.09965,19.33152%2051.29969,14.64381%2051.29962,11.83149%2051.29958))">https://www.gbif.org/occurrence/search?has_coordinate=true&amp;has_geospatial_issue=false&amp;taxon_key=7707728&amp;occurrence_status=present&amp;geometry=POLYGON((11.83149%2051.29958,11.66493%2048.09954,19.16497%2048.09965,19.33152%2051.29969,14.64381%2051.29962,11.83149%2051.29958))</a></p>
-<p><strong>proposed changes</strong></p>
+<p><a href="https://www.gbif.org/occurrence/search?has_coordinate=true&amp;has_geospatial_issue=false&amp;taxon_key=7707728&amp;occurrence_status=present&amp;geometry=POLYGON((11.83149%2051.29958,11.66493%2048.09954,19.16497%2048.09965,19.33152%2051.29969,14.64381%2051.29962,11.83149%2051.29958))&amp;coordinate_uncertainty_in_meters=0,1000">link</a></p>
+<p>in case of only Zobodat data: dataset_key=857bce66-f762-11e1-a439-00145eb45e9a</p>
 <ul>
-<li>exclude records having precision &gt; 1000m</li>
+<li>Date of GBIF export: GBIF.org (11 September 2025) GBIF Occurrence Download <a href="https://doi.org/10.15468/dl.cperjf" class="uri">https://doi.org/10.15468/dl.cperjf</a></li>
+<li>Date of GBIF export: GBIF.org (26 November 2025) GBIF Occurrence Download <a href="https://doi.org/10.15468/dl.xamd2m" class="uri">https://doi.org/10.15468/dl.xamd2m</a></li>
+<li>Date of GBIF export: GBIF.org (18 December 2025) GBIF Occurrence Download <a href="https://doi.org/10.15468/dl.pf96mm" class="uri">https://doi.org/10.15468/dl.pf96mm</a></li>
 </ul>
 </div>
             </section>
@@ -190,7 +194,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="base-query-that-imitates-the-gui-search-form-results.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="occurrence-status-including-aggregated-descendant-taxa-parent_id-is-the-taxon-to-be-reported-inlcuding-records-linked-to-itself-all-descendant-taxa.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="working-with-gbif-data-outside-of-pladias.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>

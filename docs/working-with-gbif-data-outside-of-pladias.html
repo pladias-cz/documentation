@@ -23,7 +23,7 @@
 <meta name="author" content="Pladias team" />
 
 
-<meta name="date" content="2025-05-16" />
+<meta name="date" content="2026-02-02" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="gbif-interactions.html"/>
-
+<link rel="next" href="how-is-gbif-import-done-by-admin.html"/>
 <script src="assets/jquery-3.6.1/jquery-3.6.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -153,10 +153,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="exports-of-occurrence-data.html"><a href="exports-of-occurrence-data.html"><i class="fa fa-check"></i><b>3</b> Exports of occurrence data</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="base-query-that-imitates-the-gui-search-form-results.html"><a href="base-query-that-imitates-the-gui-search-form-results.html"><i class="fa fa-check"></i><b>3.1</b> Base query that imitates the GUI search form results</a></li>
+<li class="chapter" data-level="3.2" data-path="occurrence-status-including-aggregated-descendant-taxa-parent_id-is-the-taxon-to-be-reported-inlcuding-records-linked-to-itself-all-descendant-taxa.html"><a href="occurrence-status-including-aggregated-descendant-taxa-parent_id-is-the-taxon-to-be-reported-inlcuding-records-linked-to-itself-all-descendant-taxa.html"><i class="fa fa-check"></i><b>3.2</b> occurrence status including aggregated descendant taxa (parent_id is the taxon to be reported, inlcuding records linked to itself + all descendant taxa)</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="gbif-interactions.html"><a href="gbif-interactions.html"><i class="fa fa-check"></i><b>4</b> GBIF interactions</a>
 <ul>
 <li class="chapter" data-level="4.1" data-path="working-with-gbif-data-outside-of-pladias.html"><a href="working-with-gbif-data-outside-of-pladias.html"><i class="fa fa-check"></i><b>4.1</b> Working with GBIF data outside of Pladias</a></li>
+<li class="chapter" data-level="4.2" data-path="how-is-gbif-import-done-by-admin.html"><a href="how-is-gbif-import-done-by-admin.html"><i class="fa fa-check"></i><b>4.2</b> How is gbif IMPORT done by <span class="citation">@admin</span></a></li>
 </ul></li>
 </ul>
 
@@ -186,100 +188,98 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>“create project”, that is check and confirm the data were loaded correctly (check “tabs (TSV)” is selected as a column separator + “Attempt to parse cell text into numbers” is also checked).</li>
 <li>switch to Undo/Redo tab and press Apply. When the bellow JSON code is pasted, the OpenRefine will produce a new columns “PladiasId” and “PladiasName” at the very beginning of the matrix.</li>
 </ol>
-<div class="sourceCode" id="cb2"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb2-1"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-1" tabindex="-1"></a><span class="ot">[</span></span>
-<span id="cb2-2"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-2" tabindex="-1"></a>  <span class="fu">{</span></span>
-<span id="cb2-3"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-3" tabindex="-1"></a>    <span class="dt">&quot;op&quot;</span><span class="fu">:</span> <span class="st">&quot;core/column-addition-by-fetching-urls&quot;</span><span class="fu">,</span></span>
-<span id="cb2-4"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-4" tabindex="-1"></a>    <span class="dt">&quot;engineConfig&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb2-5"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-5" tabindex="-1"></a>      <span class="dt">&quot;facets&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
-<span id="cb2-6"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-6" tabindex="-1"></a>      <span class="dt">&quot;mode&quot;</span><span class="fu">:</span> <span class="st">&quot;row-based&quot;</span></span>
-<span id="cb2-7"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-7" tabindex="-1"></a>    <span class="fu">},</span></span>
-<span id="cb2-8"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-8" tabindex="-1"></a>    <span class="dt">&quot;baseColumnName&quot;</span><span class="fu">:</span> <span class="st">&quot;taxonKey&quot;</span><span class="fu">,</span></span>
-<span id="cb2-9"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-9" tabindex="-1"></a>    <span class="dt">&quot;urlExpression&quot;</span><span class="fu">:</span> <span class="st">&quot;grel:</span><span class="ch">\&quot;</span><span class="st">https://api.pladias.cz/prest/rpc/gbif2pladias?gbif_id=</span><span class="ch">\&quot;</span><span class="st"> + value&quot;</span><span class="fu">,</span></span>
-<span id="cb2-10"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-10" tabindex="-1"></a>    <span class="dt">&quot;onError&quot;</span><span class="fu">:</span> <span class="st">&quot;set-to-blank&quot;</span><span class="fu">,</span></span>
-<span id="cb2-11"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-11" tabindex="-1"></a>    <span class="dt">&quot;newColumnName&quot;</span><span class="fu">:</span> <span class="st">&quot;pladiasRAW&quot;</span><span class="fu">,</span></span>
-<span id="cb2-12"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-12" tabindex="-1"></a>    <span class="dt">&quot;columnInsertIndex&quot;</span><span class="fu">:</span> <span class="dv">192</span><span class="fu">,</span></span>
-<span id="cb2-13"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-13" tabindex="-1"></a>    <span class="dt">&quot;delay&quot;</span><span class="fu">:</span> <span class="dv">50</span><span class="fu">,</span></span>
-<span id="cb2-14"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-14" tabindex="-1"></a>    <span class="dt">&quot;cacheResponses&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
-<span id="cb2-15"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-15" tabindex="-1"></a>    <span class="dt">&quot;httpHeadersJson&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb2-16"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-16" tabindex="-1"></a>      <span class="fu">{</span></span>
-<span id="cb2-17"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-17" tabindex="-1"></a>        <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;authorization&quot;</span><span class="fu">,</span></span>
-<span id="cb2-18"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-18" tabindex="-1"></a>        <span class="dt">&quot;value&quot;</span><span class="fu">:</span> <span class="st">&quot;&quot;</span></span>
-<span id="cb2-19"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-19" tabindex="-1"></a>      <span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb2-20"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-20" tabindex="-1"></a>      <span class="fu">{</span></span>
-<span id="cb2-21"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-21" tabindex="-1"></a>        <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;if-modified-since&quot;</span><span class="fu">,</span></span>
-<span id="cb2-22"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-22" tabindex="-1"></a>        <span class="dt">&quot;value&quot;</span><span class="fu">:</span> <span class="st">&quot;&quot;</span></span>
-<span id="cb2-23"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-23" tabindex="-1"></a>      <span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb2-24"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-24" tabindex="-1"></a>      <span class="fu">{</span></span>
-<span id="cb2-25"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-25" tabindex="-1"></a>        <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;accept-language&quot;</span><span class="fu">,</span></span>
-<span id="cb2-26"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-26" tabindex="-1"></a>        <span class="dt">&quot;value&quot;</span><span class="fu">:</span> <span class="st">&quot;&quot;</span></span>
-<span id="cb2-27"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-27" tabindex="-1"></a>      <span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb2-28"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-28" tabindex="-1"></a>      <span class="fu">{</span></span>
-<span id="cb2-29"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-29" tabindex="-1"></a>        <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;accept-encoding&quot;</span><span class="fu">,</span></span>
-<span id="cb2-30"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-30" tabindex="-1"></a>        <span class="dt">&quot;value&quot;</span><span class="fu">:</span> <span class="st">&quot;&quot;</span></span>
-<span id="cb2-31"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-31" tabindex="-1"></a>      <span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb2-32"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-32" tabindex="-1"></a>      <span class="fu">{</span></span>
-<span id="cb2-33"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-33" tabindex="-1"></a>        <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;user-agent&quot;</span><span class="fu">,</span></span>
-<span id="cb2-34"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-34" tabindex="-1"></a>        <span class="dt">&quot;value&quot;</span><span class="fu">:</span> <span class="st">&quot;OpenRefine 3.9.0 [TRUNK]&quot;</span></span>
-<span id="cb2-35"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-35" tabindex="-1"></a>      <span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb2-36"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-36" tabindex="-1"></a>      <span class="fu">{</span></span>
-<span id="cb2-37"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-37" tabindex="-1"></a>        <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;accept&quot;</span><span class="fu">,</span></span>
-<span id="cb2-38"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-38" tabindex="-1"></a>        <span class="dt">&quot;value&quot;</span><span class="fu">:</span> <span class="st">&quot;*/*&quot;</span></span>
-<span id="cb2-39"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-39" tabindex="-1"></a>      <span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb2-40"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-40" tabindex="-1"></a>      <span class="fu">{</span></span>
-<span id="cb2-41"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-41" tabindex="-1"></a>        <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;accept-charset&quot;</span><span class="fu">,</span></span>
-<span id="cb2-42"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-42" tabindex="-1"></a>        <span class="dt">&quot;value&quot;</span><span class="fu">:</span> <span class="st">&quot;&quot;</span></span>
-<span id="cb2-43"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-43" tabindex="-1"></a>      <span class="fu">}</span></span>
-<span id="cb2-44"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-44" tabindex="-1"></a>    <span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb2-45"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-45" tabindex="-1"></a>    <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Create column pladiasRAW at index 192 by fetching URLs based on column taxonKey using expression grel:</span><span class="ch">\&quot;</span><span class="st">https://api.pladias.cz/prest/rpc/gbif2pladias?gbif_id=</span><span class="ch">\&quot;</span><span class="st"> + value&quot;</span></span>
-<span id="cb2-46"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-46" tabindex="-1"></a>  <span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb2-47"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-47" tabindex="-1"></a>  <span class="fu">{</span></span>
-<span id="cb2-48"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-48" tabindex="-1"></a>    <span class="dt">&quot;op&quot;</span><span class="fu">:</span> <span class="st">&quot;core/column-move&quot;</span><span class="fu">,</span></span>
-<span id="cb2-49"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-49" tabindex="-1"></a>    <span class="dt">&quot;columnName&quot;</span><span class="fu">:</span> <span class="st">&quot;pladiasRAW&quot;</span><span class="fu">,</span></span>
-<span id="cb2-50"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-50" tabindex="-1"></a>    <span class="dt">&quot;index&quot;</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
-<span id="cb2-51"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-51" tabindex="-1"></a>    <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Move column pladiasRAW to position 0&quot;</span></span>
-<span id="cb2-52"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-52" tabindex="-1"></a>  <span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb2-53"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-53" tabindex="-1"></a>  <span class="fu">{</span></span>
-<span id="cb2-54"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-54" tabindex="-1"></a>    <span class="dt">&quot;op&quot;</span><span class="fu">:</span> <span class="st">&quot;core/column-addition&quot;</span><span class="fu">,</span></span>
-<span id="cb2-55"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-55" tabindex="-1"></a>    <span class="dt">&quot;engineConfig&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb2-56"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-56" tabindex="-1"></a>      <span class="dt">&quot;facets&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
-<span id="cb2-57"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-57" tabindex="-1"></a>      <span class="dt">&quot;mode&quot;</span><span class="fu">:</span> <span class="st">&quot;row-based&quot;</span></span>
-<span id="cb2-58"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-58" tabindex="-1"></a>    <span class="fu">},</span></span>
-<span id="cb2-59"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-59" tabindex="-1"></a>    <span class="dt">&quot;baseColumnName&quot;</span><span class="fu">:</span> <span class="st">&quot;pladiasRAW&quot;</span><span class="fu">,</span></span>
-<span id="cb2-60"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-60" tabindex="-1"></a>    <span class="dt">&quot;expression&quot;</span><span class="fu">:</span> <span class="st">&quot;grel:value.parseJson()[0][</span><span class="ch">\&quot;</span><span class="st">pladias_id</span><span class="ch">\&quot;</span><span class="st">]&quot;</span><span class="fu">,</span></span>
-<span id="cb2-61"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-61" tabindex="-1"></a>    <span class="dt">&quot;onError&quot;</span><span class="fu">:</span> <span class="st">&quot;set-to-blank&quot;</span><span class="fu">,</span></span>
-<span id="cb2-62"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-62" tabindex="-1"></a>    <span class="dt">&quot;newColumnName&quot;</span><span class="fu">:</span> <span class="st">&quot;pladiasID&quot;</span><span class="fu">,</span></span>
-<span id="cb2-63"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-63" tabindex="-1"></a>    <span class="dt">&quot;columnInsertIndex&quot;</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
-<span id="cb2-64"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-64" tabindex="-1"></a>    <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Create column pladiasID at index 1 based on column pladiasRAW using expression grel:value.parseJson()[0][</span><span class="ch">\&quot;</span><span class="st">pladias_id</span><span class="ch">\&quot;</span><span class="st">]&quot;</span></span>
-<span id="cb2-65"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-65" tabindex="-1"></a>  <span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb2-66"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-66" tabindex="-1"></a>  <span class="fu">{</span></span>
-<span id="cb2-67"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-67" tabindex="-1"></a>    <span class="dt">&quot;op&quot;</span><span class="fu">:</span> <span class="st">&quot;core/column-addition&quot;</span><span class="fu">,</span></span>
-<span id="cb2-68"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-68" tabindex="-1"></a>    <span class="dt">&quot;engineConfig&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb2-69"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-69" tabindex="-1"></a>      <span class="dt">&quot;facets&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
-<span id="cb2-70"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-70" tabindex="-1"></a>      <span class="dt">&quot;mode&quot;</span><span class="fu">:</span> <span class="st">&quot;row-based&quot;</span></span>
-<span id="cb2-71"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-71" tabindex="-1"></a>    <span class="fu">},</span></span>
-<span id="cb2-72"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-72" tabindex="-1"></a>    <span class="dt">&quot;baseColumnName&quot;</span><span class="fu">:</span> <span class="st">&quot;pladiasRAW&quot;</span><span class="fu">,</span></span>
-<span id="cb2-73"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-73" tabindex="-1"></a>    <span class="dt">&quot;expression&quot;</span><span class="fu">:</span> <span class="st">&quot;grel:value.parseJson()[0][</span><span class="ch">\&quot;</span><span class="st">pladias_name</span><span class="ch">\&quot;</span><span class="st">]&quot;</span><span class="fu">,</span></span>
-<span id="cb2-74"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-74" tabindex="-1"></a>    <span class="dt">&quot;onError&quot;</span><span class="fu">:</span> <span class="st">&quot;set-to-blank&quot;</span><span class="fu">,</span></span>
-<span id="cb2-75"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-75" tabindex="-1"></a>    <span class="dt">&quot;newColumnName&quot;</span><span class="fu">:</span> <span class="st">&quot;pladiasName&quot;</span><span class="fu">,</span></span>
-<span id="cb2-76"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-76" tabindex="-1"></a>    <span class="dt">&quot;columnInsertIndex&quot;</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
-<span id="cb2-77"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-77" tabindex="-1"></a>    <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Create column pladiasName at index 1 based on column pladiasRAW using expression grel:value.parseJson()[0][</span><span class="ch">\&quot;</span><span class="st">pladias_name</span><span class="ch">\&quot;</span><span class="st">]&quot;</span></span>
-<span id="cb2-78"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-78" tabindex="-1"></a>  <span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb2-79"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-79" tabindex="-1"></a>  <span class="fu">{</span></span>
-<span id="cb2-80"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-80" tabindex="-1"></a>    <span class="dt">&quot;op&quot;</span><span class="fu">:</span> <span class="st">&quot;core/column-removal&quot;</span><span class="fu">,</span></span>
-<span id="cb2-81"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-81" tabindex="-1"></a>    <span class="dt">&quot;columnName&quot;</span><span class="fu">:</span> <span class="st">&quot;pladiasRAW&quot;</span><span class="fu">,</span></span>
-<span id="cb2-82"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-82" tabindex="-1"></a>    <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Remove column pladiasRAW&quot;</span></span>
-<span id="cb2-83"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-83" tabindex="-1"></a>  <span class="fu">}</span></span>
-<span id="cb2-84"><a href="working-with-gbif-data-outside-of-pladias.html#cb2-84" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div>
-
+<div class="sourceCode" id="cb3"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb3-1"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-1" tabindex="-1"></a><span class="ot">[</span></span>
+<span id="cb3-2"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-2" tabindex="-1"></a>  <span class="fu">{</span></span>
+<span id="cb3-3"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-3" tabindex="-1"></a>    <span class="dt">&quot;op&quot;</span><span class="fu">:</span> <span class="st">&quot;core/column-addition-by-fetching-urls&quot;</span><span class="fu">,</span></span>
+<span id="cb3-4"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-4" tabindex="-1"></a>    <span class="dt">&quot;engineConfig&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb3-5"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-5" tabindex="-1"></a>      <span class="dt">&quot;facets&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
+<span id="cb3-6"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-6" tabindex="-1"></a>      <span class="dt">&quot;mode&quot;</span><span class="fu">:</span> <span class="st">&quot;row-based&quot;</span></span>
+<span id="cb3-7"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-7" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb3-8"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-8" tabindex="-1"></a>    <span class="dt">&quot;baseColumnName&quot;</span><span class="fu">:</span> <span class="st">&quot;taxonKey&quot;</span><span class="fu">,</span></span>
+<span id="cb3-9"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-9" tabindex="-1"></a>    <span class="dt">&quot;urlExpression&quot;</span><span class="fu">:</span> <span class="st">&quot;grel:</span><span class="ch">\&quot;</span><span class="st">https://api.pladias.cz/prest/rpc/gbif2pladias?gbif_id=</span><span class="ch">\&quot;</span><span class="st"> + value&quot;</span><span class="fu">,</span></span>
+<span id="cb3-10"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-10" tabindex="-1"></a>    <span class="dt">&quot;onError&quot;</span><span class="fu">:</span> <span class="st">&quot;set-to-blank&quot;</span><span class="fu">,</span></span>
+<span id="cb3-11"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-11" tabindex="-1"></a>    <span class="dt">&quot;newColumnName&quot;</span><span class="fu">:</span> <span class="st">&quot;pladiasRAW&quot;</span><span class="fu">,</span></span>
+<span id="cb3-12"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-12" tabindex="-1"></a>    <span class="dt">&quot;columnInsertIndex&quot;</span><span class="fu">:</span> <span class="dv">192</span><span class="fu">,</span></span>
+<span id="cb3-13"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-13" tabindex="-1"></a>    <span class="dt">&quot;delay&quot;</span><span class="fu">:</span> <span class="dv">50</span><span class="fu">,</span></span>
+<span id="cb3-14"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-14" tabindex="-1"></a>    <span class="dt">&quot;cacheResponses&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
+<span id="cb3-15"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-15" tabindex="-1"></a>    <span class="dt">&quot;httpHeadersJson&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb3-16"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-16" tabindex="-1"></a>      <span class="fu">{</span></span>
+<span id="cb3-17"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-17" tabindex="-1"></a>        <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;authorization&quot;</span><span class="fu">,</span></span>
+<span id="cb3-18"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-18" tabindex="-1"></a>        <span class="dt">&quot;value&quot;</span><span class="fu">:</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb3-19"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-19" tabindex="-1"></a>      <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb3-20"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-20" tabindex="-1"></a>      <span class="fu">{</span></span>
+<span id="cb3-21"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-21" tabindex="-1"></a>        <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;if-modified-since&quot;</span><span class="fu">,</span></span>
+<span id="cb3-22"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-22" tabindex="-1"></a>        <span class="dt">&quot;value&quot;</span><span class="fu">:</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb3-23"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-23" tabindex="-1"></a>      <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb3-24"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-24" tabindex="-1"></a>      <span class="fu">{</span></span>
+<span id="cb3-25"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-25" tabindex="-1"></a>        <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;accept-language&quot;</span><span class="fu">,</span></span>
+<span id="cb3-26"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-26" tabindex="-1"></a>        <span class="dt">&quot;value&quot;</span><span class="fu">:</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb3-27"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-27" tabindex="-1"></a>      <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb3-28"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-28" tabindex="-1"></a>      <span class="fu">{</span></span>
+<span id="cb3-29"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-29" tabindex="-1"></a>        <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;accept-encoding&quot;</span><span class="fu">,</span></span>
+<span id="cb3-30"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-30" tabindex="-1"></a>        <span class="dt">&quot;value&quot;</span><span class="fu">:</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb3-31"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-31" tabindex="-1"></a>      <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb3-32"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-32" tabindex="-1"></a>      <span class="fu">{</span></span>
+<span id="cb3-33"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-33" tabindex="-1"></a>        <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;user-agent&quot;</span><span class="fu">,</span></span>
+<span id="cb3-34"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-34" tabindex="-1"></a>        <span class="dt">&quot;value&quot;</span><span class="fu">:</span> <span class="st">&quot;OpenRefine 3.9.0 [TRUNK]&quot;</span></span>
+<span id="cb3-35"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-35" tabindex="-1"></a>      <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb3-36"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-36" tabindex="-1"></a>      <span class="fu">{</span></span>
+<span id="cb3-37"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-37" tabindex="-1"></a>        <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;accept&quot;</span><span class="fu">,</span></span>
+<span id="cb3-38"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-38" tabindex="-1"></a>        <span class="dt">&quot;value&quot;</span><span class="fu">:</span> <span class="st">&quot;*/*&quot;</span></span>
+<span id="cb3-39"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-39" tabindex="-1"></a>      <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb3-40"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-40" tabindex="-1"></a>      <span class="fu">{</span></span>
+<span id="cb3-41"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-41" tabindex="-1"></a>        <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;accept-charset&quot;</span><span class="fu">,</span></span>
+<span id="cb3-42"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-42" tabindex="-1"></a>        <span class="dt">&quot;value&quot;</span><span class="fu">:</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb3-43"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-43" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb3-44"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-44" tabindex="-1"></a>    <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb3-45"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-45" tabindex="-1"></a>    <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Create column pladiasRAW at index 192 by fetching URLs based on column taxonKey using expression grel:</span><span class="ch">\&quot;</span><span class="st">https://api.pladias.cz/prest/rpc/gbif2pladias?gbif_id=</span><span class="ch">\&quot;</span><span class="st"> + value&quot;</span></span>
+<span id="cb3-46"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-46" tabindex="-1"></a>  <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb3-47"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-47" tabindex="-1"></a>  <span class="fu">{</span></span>
+<span id="cb3-48"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-48" tabindex="-1"></a>    <span class="dt">&quot;op&quot;</span><span class="fu">:</span> <span class="st">&quot;core/column-move&quot;</span><span class="fu">,</span></span>
+<span id="cb3-49"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-49" tabindex="-1"></a>    <span class="dt">&quot;columnName&quot;</span><span class="fu">:</span> <span class="st">&quot;pladiasRAW&quot;</span><span class="fu">,</span></span>
+<span id="cb3-50"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-50" tabindex="-1"></a>    <span class="dt">&quot;index&quot;</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
+<span id="cb3-51"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-51" tabindex="-1"></a>    <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Move column pladiasRAW to position 0&quot;</span></span>
+<span id="cb3-52"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-52" tabindex="-1"></a>  <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb3-53"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-53" tabindex="-1"></a>  <span class="fu">{</span></span>
+<span id="cb3-54"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-54" tabindex="-1"></a>    <span class="dt">&quot;op&quot;</span><span class="fu">:</span> <span class="st">&quot;core/column-addition&quot;</span><span class="fu">,</span></span>
+<span id="cb3-55"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-55" tabindex="-1"></a>    <span class="dt">&quot;engineConfig&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb3-56"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-56" tabindex="-1"></a>      <span class="dt">&quot;facets&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
+<span id="cb3-57"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-57" tabindex="-1"></a>      <span class="dt">&quot;mode&quot;</span><span class="fu">:</span> <span class="st">&quot;row-based&quot;</span></span>
+<span id="cb3-58"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-58" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb3-59"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-59" tabindex="-1"></a>    <span class="dt">&quot;baseColumnName&quot;</span><span class="fu">:</span> <span class="st">&quot;pladiasRAW&quot;</span><span class="fu">,</span></span>
+<span id="cb3-60"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-60" tabindex="-1"></a>    <span class="dt">&quot;expression&quot;</span><span class="fu">:</span> <span class="st">&quot;grel:value.parseJson()[0][</span><span class="ch">\&quot;</span><span class="st">pladias_id</span><span class="ch">\&quot;</span><span class="st">]&quot;</span><span class="fu">,</span></span>
+<span id="cb3-61"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-61" tabindex="-1"></a>    <span class="dt">&quot;onError&quot;</span><span class="fu">:</span> <span class="st">&quot;set-to-blank&quot;</span><span class="fu">,</span></span>
+<span id="cb3-62"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-62" tabindex="-1"></a>    <span class="dt">&quot;newColumnName&quot;</span><span class="fu">:</span> <span class="st">&quot;pladiasID&quot;</span><span class="fu">,</span></span>
+<span id="cb3-63"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-63" tabindex="-1"></a>    <span class="dt">&quot;columnInsertIndex&quot;</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb3-64"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-64" tabindex="-1"></a>    <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Create column pladiasID at index 1 based on column pladiasRAW using expression grel:value.parseJson()[0][</span><span class="ch">\&quot;</span><span class="st">pladias_id</span><span class="ch">\&quot;</span><span class="st">]&quot;</span></span>
+<span id="cb3-65"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-65" tabindex="-1"></a>  <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb3-66"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-66" tabindex="-1"></a>  <span class="fu">{</span></span>
+<span id="cb3-67"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-67" tabindex="-1"></a>    <span class="dt">&quot;op&quot;</span><span class="fu">:</span> <span class="st">&quot;core/column-addition&quot;</span><span class="fu">,</span></span>
+<span id="cb3-68"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-68" tabindex="-1"></a>    <span class="dt">&quot;engineConfig&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb3-69"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-69" tabindex="-1"></a>      <span class="dt">&quot;facets&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
+<span id="cb3-70"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-70" tabindex="-1"></a>      <span class="dt">&quot;mode&quot;</span><span class="fu">:</span> <span class="st">&quot;row-based&quot;</span></span>
+<span id="cb3-71"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-71" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb3-72"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-72" tabindex="-1"></a>    <span class="dt">&quot;baseColumnName&quot;</span><span class="fu">:</span> <span class="st">&quot;pladiasRAW&quot;</span><span class="fu">,</span></span>
+<span id="cb3-73"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-73" tabindex="-1"></a>    <span class="dt">&quot;expression&quot;</span><span class="fu">:</span> <span class="st">&quot;grel:value.parseJson()[0][</span><span class="ch">\&quot;</span><span class="st">pladias_name</span><span class="ch">\&quot;</span><span class="st">]&quot;</span><span class="fu">,</span></span>
+<span id="cb3-74"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-74" tabindex="-1"></a>    <span class="dt">&quot;onError&quot;</span><span class="fu">:</span> <span class="st">&quot;set-to-blank&quot;</span><span class="fu">,</span></span>
+<span id="cb3-75"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-75" tabindex="-1"></a>    <span class="dt">&quot;newColumnName&quot;</span><span class="fu">:</span> <span class="st">&quot;pladiasName&quot;</span><span class="fu">,</span></span>
+<span id="cb3-76"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-76" tabindex="-1"></a>    <span class="dt">&quot;columnInsertIndex&quot;</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb3-77"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-77" tabindex="-1"></a>    <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Create column pladiasName at index 1 based on column pladiasRAW using expression grel:value.parseJson()[0][</span><span class="ch">\&quot;</span><span class="st">pladias_name</span><span class="ch">\&quot;</span><span class="st">]&quot;</span></span>
+<span id="cb3-78"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-78" tabindex="-1"></a>  <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb3-79"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-79" tabindex="-1"></a>  <span class="fu">{</span></span>
+<span id="cb3-80"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-80" tabindex="-1"></a>    <span class="dt">&quot;op&quot;</span><span class="fu">:</span> <span class="st">&quot;core/column-removal&quot;</span><span class="fu">,</span></span>
+<span id="cb3-81"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-81" tabindex="-1"></a>    <span class="dt">&quot;columnName&quot;</span><span class="fu">:</span> <span class="st">&quot;pladiasRAW&quot;</span><span class="fu">,</span></span>
+<span id="cb3-82"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-82" tabindex="-1"></a>    <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Remove column pladiasRAW&quot;</span></span>
+<span id="cb3-83"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-83" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb3-84"><a href="working-with-gbif-data-outside-of-pladias.html#cb3-84" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div>
 </div>
-<!-- </div> -->
             </section>
 
           </div>
         </div>
       </div>
-<a href="gbif-interactions.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="gbif-interactions.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="how-is-gbif-import-done-by-admin.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="assets/gitbook-2.6.7/js/app.min.js"></script>

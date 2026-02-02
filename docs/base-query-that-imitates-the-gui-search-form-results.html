@@ -23,7 +23,7 @@
 <meta name="author" content="Pladias team" />
 
 
-<meta name="date" content="2025-05-16" />
+<meta name="date" content="2026-02-02" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="exports-of-occurrence-data.html"/>
-<link rel="next" href="gbif-interactions.html"/>
+<link rel="next" href="occurrence-status-including-aggregated-descendant-taxa-parent_id-is-the-taxon-to-be-reported-inlcuding-records-linked-to-itself-all-descendant-taxa.html"/>
 <script src="assets/jquery-3.6.1/jquery-3.6.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -153,10 +153,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="exports-of-occurrence-data.html"><a href="exports-of-occurrence-data.html"><i class="fa fa-check"></i><b>3</b> Exports of occurrence data</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="base-query-that-imitates-the-gui-search-form-results.html"><a href="base-query-that-imitates-the-gui-search-form-results.html"><i class="fa fa-check"></i><b>3.1</b> Base query that imitates the GUI search form results</a></li>
+<li class="chapter" data-level="3.2" data-path="occurrence-status-including-aggregated-descendant-taxa-parent_id-is-the-taxon-to-be-reported-inlcuding-records-linked-to-itself-all-descendant-taxa.html"><a href="occurrence-status-including-aggregated-descendant-taxa-parent_id-is-the-taxon-to-be-reported-inlcuding-records-linked-to-itself-all-descendant-taxa.html"><i class="fa fa-check"></i><b>3.2</b> occurrence status including aggregated descendant taxa (parent_id is the taxon to be reported, inlcuding records linked to itself + all descendant taxa)</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="gbif-interactions.html"><a href="gbif-interactions.html"><i class="fa fa-check"></i><b>4</b> GBIF interactions</a>
 <ul>
 <li class="chapter" data-level="4.1" data-path="working-with-gbif-data-outside-of-pladias.html"><a href="working-with-gbif-data-outside-of-pladias.html"><i class="fa fa-check"></i><b>4.1</b> Working with GBIF data outside of Pladias</a></li>
+<li class="chapter" data-level="4.2" data-path="how-is-gbif-import-done-by-admin.html"><a href="how-is-gbif-import-done-by-admin.html"><i class="fa fa-check"></i><b>4.2</b> How is gbif IMPORT done by <span class="citation">@admin</span></a></li>
 </ul></li>
 </ul>
 
@@ -234,16 +236,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-55"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-55" tabindex="-1"></a>    <span class="kw">LEFT</span> <span class="kw">JOIN</span> atlas.record_originality_status <span class="kw">on</span> records.originality_id <span class="op">=</span> record_originality_status.<span class="kw">id</span></span>
 <span id="cb1-56"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-56" tabindex="-1"></a>    <span class="kw">LEFT</span> <span class="kw">JOIN</span> atlas.projects <span class="kw">on</span> records.project_id <span class="op">=</span> projects.<span class="kw">id</span></span>
 <span id="cb1-57"><a href="base-query-that-imitates-the-gui-search-form-results.html#cb1-57" tabindex="-1"></a>    <span class="kw">LEFT</span> <span class="kw">JOIN</span> <span class="kw">public</span>.licenses <span class="kw">on</span> records.license_id <span class="op">=</span> licenses.<span class="kw">id</span>;</span></code></pre></div>
-
 </div>
-<!-- </div> -->
             </section>
 
           </div>
         </div>
       </div>
 <a href="exports-of-occurrence-data.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="gbif-interactions.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="occurrence-status-including-aggregated-descendant-taxa-parent_id-is-the-taxon-to-be-reported-inlcuding-records-linked-to-itself-all-descendant-taxa.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="assets/gitbook-2.6.7/js/app.min.js"></script>
