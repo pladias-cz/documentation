@@ -1,11 +1,11 @@
 ---
 ---
 # GBIF interactions
-Since 2025, we do show records exported from GBIF in the Pladias internal app, as an point marker accompanied with a link to the specimen info page.
+Since 2025, we do show records exported from GBIF in the Pladias internal app, as a point marker accompanied by a link to the specimen info page.
 
 To get the data, this query is used:
 
-[link](https://www.gbif.org/occurrence/search?has_coordinate=true&has_geospatial_issue=false&taxon_key=7707728&occurrence_status=present&geometry=POLYGON((11.83149%2051.29958,11.66493%2048.09954,19.16497%2048.09965,19.33152%2051.29969,14.64381%2051.29962,11.83149%2051.29958))&coordinate_uncertainty_in_meters=0,1000)
+[link to the GBIF results](https://www.gbif.org/occurrence/search?has_coordinate=true&has_geospatial_issue=false&taxon_key=7707728&occurrence_status=present&geometry=POLYGON((11.83149%2051.29958,11.66493%2048.09954,19.16497%2048.09965,19.33152%2051.29969,14.64381%2051.29962,11.83149%2051.29958))&coordinate_uncertainty_in_meters=0,1000)
 
 in case of only Zobodat data: dataset_key=857bce66-f762-11e1-a439-00145eb45e9a
 
