@@ -5,7 +5,7 @@ Since 2025, we do show records exported from GBIF in the Pladias internal app, a
 
 To get the data, this query is used:
 
-[link to the GBIF results](https://www.gbif.org/occurrence/search?has_coordinate=true&has_geospatial_issue=false&taxon_key=7707728&occurrence_status=present&geometry=POLYGON((11.83149%2051.29958,11.66493%2048.09954,19.16497%2048.09965,19.33152%2051.29969,14.64381%2051.29962,11.83149%2051.29958))&coordinate_uncertainty_in_meters=0,1000)
+[link to the GBIF results](https://www.gbif.org/occurrence/search?has_coordinate=true&has_geospatial_issue=false&taxon_key=7707728&occurrence_status=present&geometry=POLYGON((11.83149%2051.29958,11.66493%2048.09954,19.16497%2048.09965,19.33152%2051.29969,14.64381%2051.29962,11.83149%2051.29958)))
 
 in case of only Zobodat data for FVD: https://www.gbif.org/occurrence/search?has_coordinate=true&has_geospatial_issue=false&taxon_key=7707728&occurrence_status=present&geometry=POLYGON((11.83149%2051.29958,11.66493%2048.09954,19.16497%2048.09965,19.33152%2051.29969,14.64381%2051.29962,11.83149%2051.29958))&dataset_key=857bce66-f762-11e1-a439-00145eb45e9a
 
@@ -144,7 +144,7 @@ A recipe for the OpenRefine tool is available for this purpose:
       TRUNCATE TABLE gbif.records RESTART IDENTITY;
     ```
 4) upload occurrences from Simple on megastroj, import records.csv via admin.pladias.cz Console ``` docker cp ./data/records.csv adminpladiascz-app-1:/srv/temp/data/records.csv   &&  nohup docker exec adminpladiascz-app-1 bin/console gbif:importRecords > output.log 2>&1 &```. When testing on localhost inside container, use ```NETTE_ENV=prod bin/console gbif:importRecords```
-5) maybe limit precision ```DELETE FROM gbif.records WHERE coords_precision > 10000; ```
+5) limit precision (DO NOT prefilter during GBIF export - some records have no uncertainty specified and would be excluded) ```DELETE FROM gbif.records WHERE coords_precision > 10000; ```
 5) we fake GBIF taxa to solve missing aggregates rank: there are some manualy introduced taxa with taxonKey>=10^9 in the gbif.taxa table, we want to update their records with the faked taxon_key values 
  how many are there
  ```sql 
