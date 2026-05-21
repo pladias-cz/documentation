@@ -13,6 +13,7 @@ in case of only Zobodat data for FVD: https://www.gbif.org/occurrence/search?has
 - Date of GBIF export: GBIF.org (26 November 2025) GBIF Occurrence Download  https://doi.org/10.15468/dl.xamd2m
 - Date of GBIF export: GBIF.org (18 December 2025) GBIF Occurrence Download https://doi.org/10.15468/dl.pf96mm
 - GBIF.org (13 May 2026) GBIF Occurrence Download https://doi.org/10.15468/dl.ayus38
+- GBIF.org (21 May 2026) GBIF Occurrence Download https://doi.org/10.15468/dl.uz285b
 
 
 ## Working with GBIF data outside of Pladias
@@ -143,7 +144,22 @@ A recipe for the OpenRefine tool is available for this purpose:
       DROP INDEX IF EXISTS gbif.records_institution_code_idx;
       TRUNCATE TABLE gbif.records RESTART IDENTITY;
     ```
-4) upload occurrences from Simple on megastroj, import records.csv via admin.pladias.cz Console ``` docker cp ./data/records.csv adminpladiascz-app-1:/srv/temp/data/records.csv   &&  nohup docker exec adminpladiascz-app-1 bin/console gbif:importRecords > output.log 2>&1 &```. When testing on localhost inside container, use ```NETTE_ENV=prod bin/console gbif:importRecords```
+4) upload occurrences from Simple on megastroj, import records.csv via admin.pladias.cz Console 
+   ```shell 
+   wget .... \
+   && unzip xx.zip \
+   && mv xx.txt records.csv \
+   && docker cp records.csv adminpladiascz-app-1:/srv/temp/data/records.csv```
+3) the source file might be too large to be loaded into the database via exsting scripts, split it inside container into chunks and load them one by one.:   
+   ```shell
+   head -n 1 records.csv > header.txt
+   tail -n +2 records.csv | split -l 4000000 - records_part_
+   for f in records_part_*; do
+    cat header.txt "$f" > "${f}.csv"
+   done
+   rm records_part_aa records_part_ab records_part_ac ..
+   ```
+4)  import chunks via admin.pladias.cz Console ```nohup docker exec adminpladiascz-app-1 NETTE_ENV=prod bin/console gbif:importRecords > output.log 2>&1 &```.
 5) limit precision (DO NOT prefilter during GBIF export - some records have no uncertainty specified and would be excluded) ```DELETE FROM gbif.records WHERE coords_precision > 10000; ```
 5) we fake GBIF taxa to solve missing aggregates rank: there are some manualy introduced taxa with taxonKey>=10^9 in the gbif.taxa table, we want to update their records with the faked taxon_key values 
  how many are there
