@@ -158,6 +158,10 @@ A recipe for the OpenRefine tool is available for this purpose:
     cat header.txt "$f" > "${f}.csv"
    done
    rm records_part_aa records_part_ab records_part_ac ..
+   # or analyse subset of records
+   grep -n '4850325690' records.csv
+   (head -n 1 records.csv && sed -n '6563620,6563635p' records.csv) > vyrez.csv
+    
    ```
 4)  import chunks via admin.pladias.cz Console ```nohup docker exec adminpladiascz-app-1 bin/console gbif:importRecords > output.log 2>&1 &```.
 5) limit precision (DO NOT prefilter during GBIF export - some records have no uncertainty specified and would be excluded) ```DELETE FROM gbif.records WHERE coords_precision > 10000; ```
