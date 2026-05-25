@@ -142,6 +142,8 @@ A recipe for the OpenRefine tool is available for this purpose:
       DROP INDEX IF EXISTS gbif.gbif_records_taxon_key_idx;
       DROP INDEX IF EXISTS gbif.gbif_records_year_idx;
       DROP INDEX IF EXISTS gbif.records_institution_code_idx;
+      DROP INDEX IF EXISTS gbif.records_datasetkey_idx;
+
       TRUNCATE TABLE gbif.records RESTART IDENTITY;
     ```
 4) upload occurrences from Simple on megastroj, import records.csv via admin.pladias.cz Console 
@@ -223,5 +225,10 @@ A recipe for the OpenRefine tool is available for this purpose:
    CREATE INDEX IF NOT EXISTS records_institution_code_idx
    ON gbif.records USING btree
    (institution_code COLLATE pg_catalog."default" ASC NULLS LAST)
+   TABLESPACE pg_default;
+   
+   CREATE INDEX IF NOT EXISTS records_datasetkey_idx
+   ON gbif.records USING btree
+   (dataset_key COLLATE pg_catalog."default" ASC NULLS LAST)
    TABLESPACE pg_default;
     ```
