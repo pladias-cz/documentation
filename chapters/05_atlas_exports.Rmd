@@ -10,7 +10,17 @@ SELECT
     taxons_clear.name_lat AS jmeno_stand,
     records.original_name AS jmeno_orig,
     records.locality AS lokalita,
-    records.nearest_town_text AS nejblizsi_obec,
+    CASE 
+        WHEN records.nearest_town_text IS NOT NULL
+            THEN records.nearest_town_text
+        WHEN records.nearest_town_id IS NOT NULL
+            THEN (SELECT name FROM geodata.districts WHERE districts.id = records.nearest_town_id)
+        ELSE
+        (
+            SELECT name
+            FROM geodata.districts
+            WHERE depth = 4 AND st_intersects(records.coords_wgs, districts.geom_wgs) LIMIT 1)
+    END AS nejblizsi_obec,
     districts.name AS okres,
     CASE
         WHEN records.altitude_min IS NULL
