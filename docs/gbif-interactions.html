@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 4 GBIF interactions | Pladias.cz documentation</title>
   <meta name="description" content="Chapter 4 GBIF interactions | Pladias.cz documentation" />
-  <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 4 GBIF interactions | Pladias.cz documentation" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Pladias team" />
 
 
-<meta name="date" content="2026-02-02" />
+<meta name="date" content="2026-07-02" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,7 +32,7 @@
   
 <link rel="prev" href="occurrence-status-including-aggregated-descendant-taxa-parent_id-is-the-taxon-to-be-reported-inlcuding-records-linked-to-itself-all-descendant-taxa.html"/>
 <link rel="next" href="working-with-gbif-data-outside-of-pladias.html"/>
-<script src="assets/jquery-3.6.1/jquery-3.6.1.min.js"></script>
+<script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -57,8 +57,9 @@
 
 
 <style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -181,12 +182,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Chapter 4</span> GBIF interactions<a href="gbif-interactions.html#gbif-interactions" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>Since 2025, we do show records exported from GBIF in the Pladias internal app, as a point marker accompanied by a link to the specimen info page.</p>
 <p>To get the data, this query is used:</p>
-<p><a href="https://www.gbif.org/occurrence/search?has_coordinate=true&amp;has_geospatial_issue=false&amp;taxon_key=7707728&amp;occurrence_status=present&amp;geometry=POLYGON((11.83149%2051.29958,11.66493%2048.09954,19.16497%2048.09965,19.33152%2051.29969,14.64381%2051.29962,11.83149%2051.29958))&amp;coordinate_uncertainty_in_meters=0,1000">link to the GBIF results</a></p>
-<p>in case of only Zobodat data: dataset_key=857bce66-f762-11e1-a439-00145eb45e9a</p>
+<p><a href="https://www.gbif.org/occurrence/search?has_coordinate=true&amp;has_geospatial_issue=false&amp;taxon_key=7707728&amp;occurrence_status=present&amp;geometry=POLYGON((11.83149%2051.29958,11.66493%2048.09954,19.16497%2048.09965,19.33152%2051.29969,14.64381%2051.29962,11.83149%2051.29958))">link to the GBIF results</a></p>
+<p>in case of only Zobodat data for FVD: <a href="https://www.gbif.org/occurrence/search?has_coordinate=true&amp;has_geospatial_issue=false&amp;taxon_key=7707728&amp;occurrence_status=present&amp;geometry=POLYGON" class="uri">https://www.gbif.org/occurrence/search?has_coordinate=true&amp;has_geospatial_issue=false&amp;taxon_key=7707728&amp;occurrence_status=present&amp;geometry=POLYGON</a>((11.83149%2051.29958,11.66493%2048.09954,19.16497%2048.09965,19.33152%2051.29969,14.64381%2051.29962,11.83149%2051.29958))&amp;dataset_key=857bce66-f762-11e1-a439-00145eb45e9a</p>
 <ul>
 <li>Date of GBIF export: GBIF.org (11 September 2025) GBIF Occurrence Download <a href="https://doi.org/10.15468/dl.cperjf" class="uri">https://doi.org/10.15468/dl.cperjf</a></li>
 <li>Date of GBIF export: GBIF.org (26 November 2025) GBIF Occurrence Download <a href="https://doi.org/10.15468/dl.xamd2m" class="uri">https://doi.org/10.15468/dl.xamd2m</a></li>
 <li>Date of GBIF export: GBIF.org (18 December 2025) GBIF Occurrence Download <a href="https://doi.org/10.15468/dl.pf96mm" class="uri">https://doi.org/10.15468/dl.pf96mm</a></li>
+<li>GBIF.org (13 May 2026) GBIF Occurrence Download <a href="https://doi.org/10.15468/dl.ayus38" class="uri">https://doi.org/10.15468/dl.ayus38</a></li>
+<li>GBIF.org (21 May 2026) GBIF Occurrence Download <a href="https://doi.org/10.15468/dl.uz285b" class="uri">https://doi.org/10.15468/dl.uz285b</a></li>
 </ul>
 </div>
             </section>

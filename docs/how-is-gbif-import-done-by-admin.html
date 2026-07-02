@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>4.2 How is gbif IMPORT done by @admin | Pladias.cz documentation</title>
   <meta name="description" content="4.2 How is gbif IMPORT done by @admin | Pladias.cz documentation" />
-  <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
 
   <meta property="og:title" content="4.2 How is gbif IMPORT done by @admin | Pladias.cz documentation" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Pladias team" />
 
 
-<meta name="date" content="2026-02-02" />
+<meta name="date" content="2026-07-02" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,7 +32,7 @@
   
 <link rel="prev" href="working-with-gbif-data-outside-of-pladias.html"/>
 
-<script src="assets/jquery-3.6.1/jquery-3.6.1.min.js"></script>
+<script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -57,8 +57,9 @@
 
 
 <style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -200,10 +201,59 @@ DO UPDATE SET
  species = EXCLUDED.species,
  species_key = EXCLUDED.species_key
  ;&quot;</code></pre></li>
-<li><p>cleanup &amp; truncate table:
-<code>sql      ALTER TABLE IF EXISTS gbif.records DROP CONSTRAINT IF EXISTS gbif_records_taxon_fkey;       DROP INDEX IF EXISTS gbif.gbif_records_coords_idx;       DROP INDEX IF EXISTS gbif.gbif_records_taxon_key_idx;       DROP INDEX IF EXISTS gbif.gbif_records_year_idx;       DROP INDEX IF EXISTS gbif.records_institution_code_idx;       TRUNCATE TABLE gbif.records RESTART IDENTITY;</code></p></li>
-<li><p>upload occurrences from Simple on megastroj, import records.csv via admin.pladias.cz Console <code>docker cp ./data/records.csv adminpladiascz-app-1:/srv/temp/data/records.csv   &amp;&amp;  nohup docker exec adminpladiascz-app-1 bin/console gbif:importRecords &gt; output.log 2&gt;&amp;1 &amp;</code></p></li>
-<li><p>due foreignKey remove records those are not mapped <code>sql DELETE FROM gbif.records r WHERE NOT EXISTS (SELECT 1 FROM gbif.taxa t WHERE t.taxon_key = r.taxon_key);</code></p></li>
+<li><p>cleanup &amp; truncate records table:
+```sql
+ALTER TABLE IF EXISTS gbif.records DROP CONSTRAINT IF EXISTS gbif_records_taxon_fkey;
+DROP INDEX IF EXISTS gbif.gbif_records_coords_idx;
+DROP INDEX IF EXISTS gbif.gbif_records_taxon_key_idx;
+DROP INDEX IF EXISTS gbif.gbif_records_year_idx;
+DROP INDEX IF EXISTS gbif.records_institution_code_idx;
+DROP INDEX IF EXISTS gbif.records_datasetkey_idx;</p>
+<p>TRUNCATE TABLE gbif.records RESTART IDENTITY;
+```</p></li>
+<li><p>upload occurrences from Simple on megastroj, import records.csv via admin.pladias.cz Console
+<code>shell  wget .... \ &amp;&amp; unzip xx.zip \ &amp;&amp; mv xx.txt original.csv \ &amp;&amp; docker cp original.csv adminpladiascz-app-1:/srv/temp/data/original.csv</code></p></li>
+<li><p>the source file might be too large to be loaded into the database via exsting scripts, split it inside container into chunks and load them one by one.:</p>
+<pre class="shell"><code>head -n 1 original.csv &gt; header.txt
+tail -n +2 original.csv | split -l 4000000 - records_part_
+for f in records_part_*; do
+ cat header.txt &quot;$f&quot; &gt; &quot;${f}.csv&quot;
+done
+rm records_part_aa records_part_ab records_part_ac ..
+# or analyse subset of records
+grep -n &#39;4850325690&#39; records.csv
+(head -n 1 records.csv &amp;&amp; sed -n &#39;6563620,6563635p&#39; records.csv) &gt; vyrez.csv
+</code></pre></li>
+<li><p>import chunks via admin.pladias.cz Console <code>nohup docker exec adminpladiascz-app-1 bin/console gbif:importRecords &gt; output.log 2&gt;&amp;1 &amp;</code>.</p></li>
+<li><p>limit precision (DO NOT prefilter during GBIF export - some records have no uncertainty specified and would be excluded) <code>DELETE FROM gbif.records WHERE coords_precision &gt; 10000;</code></p></li>
+<li><p>we fake GBIF taxa to solve missing aggregates rank: there are some manualy introduced taxa with taxonKey&gt;=10^9 in the gbif.taxa table, we want to update their records with the faked taxon_key values
+how many are there</p></li>
+</ol>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb6-1"><a href="how-is-gbif-import-done-by-admin.html#cb6-1" tabindex="-1"></a>  <span class="kw">SELECT</span> <span class="fu">count</span>(<span class="op">*</span>) <span class="kw">FROM</span> gbif.records r</span>
+<span id="cb6-2"><a href="how-is-gbif-import-done-by-admin.html#cb6-2" tabindex="-1"></a>  <span class="kw">WHERE</span> r.taxon_rank <span class="op">=</span> <span class="st">&#39;GENUS&#39;</span></span>
+<span id="cb6-3"><a href="how-is-gbif-import-done-by-admin.html#cb6-3" tabindex="-1"></a>  <span class="kw">AND</span> r.verbatim_scientific_name <span class="kw">LIKE</span> <span class="st">&#39;% agg.&#39;</span></span>
+<span id="cb6-4"><a href="how-is-gbif-import-done-by-admin.html#cb6-4" tabindex="-1"></a>  <span class="kw">AND</span> <span class="kw">exists</span> (<span class="kw">SELECT</span> t.<span class="kw">id</span> <span class="kw">FROM</span> gbif.taxa t <span class="kw">WHERE</span> t.taxon_key <span class="op">&gt;=</span> <span class="dv">1000000000</span> <span class="kw">AND</span> t.scientific_name <span class="op">=</span> r.verbatim_scientific_name) </span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb7-1"><a href="how-is-gbif-import-done-by-admin.html#cb7-1" tabindex="-1"></a>  <span class="kw">UPDATE</span> gbif.records r</span>
+<span id="cb7-2"><a href="how-is-gbif-import-done-by-admin.html#cb7-2" tabindex="-1"></a>  <span class="kw">SET</span> taxon_key <span class="op">=</span> t.taxon_key</span>
+<span id="cb7-3"><a href="how-is-gbif-import-done-by-admin.html#cb7-3" tabindex="-1"></a>  <span class="kw">FROM</span> gbif.taxa t</span>
+<span id="cb7-4"><a href="how-is-gbif-import-done-by-admin.html#cb7-4" tabindex="-1"></a>  <span class="kw">WHERE</span> r.taxon_rank <span class="op">=</span> <span class="st">&#39;GENUS&#39;</span></span>
+<span id="cb7-5"><a href="how-is-gbif-import-done-by-admin.html#cb7-5" tabindex="-1"></a>  <span class="kw">AND</span> r.verbatim_scientific_name <span class="kw">LIKE</span> <span class="st">&#39;% agg.%&#39;</span></span>
+<span id="cb7-6"><a href="how-is-gbif-import-done-by-admin.html#cb7-6" tabindex="-1"></a>  <span class="kw">AND</span> t.taxon_key <span class="op">&gt;=</span> <span class="dv">1000000000</span></span>
+<span id="cb7-7"><a href="how-is-gbif-import-done-by-admin.html#cb7-7" tabindex="-1"></a>  <span class="kw">AND</span> t.scientific_name <span class="op">=</span> r.verbatim_scientific_name; </span></code></pre></div>
+<ol start="5" style="list-style-type: decimal">
+<li>to fulfill foreignKey and not store balast, remove records those are not mapped <code>sql DELETE FROM gbif.records r WHERE NOT EXISTS (SELECT 1 FROM gbif.taxa t WHERE t.taxon_key = r.taxon_key);</code></li>
+<li>austria-only taxa require more magic</li>
+</ol>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb8-1"><a href="how-is-gbif-import-done-by-admin.html#cb8-1" tabindex="-1"></a> <span class="kw">SELECT</span> name_lat <span class="kw">FROM</span> bayernflora.taxons_fsg t</span>
+<span id="cb8-2"><a href="how-is-gbif-import-done-by-admin.html#cb8-2" tabindex="-1"></a> <span class="kw">WHERE</span> t.is_fvd <span class="op">=</span> <span class="kw">true</span></span>
+<span id="cb8-3"><a href="how-is-gbif-import-done-by-admin.html#cb8-3" tabindex="-1"></a>   <span class="kw">AND</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> (<span class="kw">SELECT</span> <span class="dv">1</span> <span class="kw">FROM</span> bayernflora.taxons_convertor c <span class="kw">WHERE</span> c.fsg_taxon_id <span class="op">=</span> t.<span class="kw">id</span> <span class="kw">AND</span> pladias_taxon <span class="kw">IS</span> <span class="kw">NOT</span> <span class="kw">NULL</span> )</span>
+<span id="cb8-4"><a href="how-is-gbif-import-done-by-admin.html#cb8-4" tabindex="-1"></a>   <span class="kw">AND</span> <span class="kw">EXISTS</span> (<span class="kw">SELECT</span> <span class="dv">1</span> <span class="kw">FROM</span> gbif.taxa g <span class="kw">WHERE</span> g.species <span class="op">=</span> t.name_lat)</span>
+<span id="cb8-5"><a href="how-is-gbif-import-done-by-admin.html#cb8-5" tabindex="-1"></a>   <span class="kw">AND</span> <span class="kw">EXISTS</span> (<span class="kw">SELECT</span> <span class="dv">1</span> <span class="kw">FROM</span> gbif.taxa g <span class="kw">WHERE</span>  g.accepted_scientific_name <span class="kw">LIKE</span> t.name_lat<span class="op">||</span> <span class="st">&#39;%&#39;</span>)</span>
+<span id="cb8-6"><a href="how-is-gbif-import-done-by-admin.html#cb8-6" tabindex="-1"></a> <span class="kw">ORDER</span> <span class="kw">BY</span> t.name_lat <span class="kw">ASC</span></span>
+<span id="cb8-7"><a href="how-is-gbif-import-done-by-admin.html#cb8-7" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="how-is-gbif-import-done-by-admin.html#cb8-8" tabindex="-1"></a><span class="co">--(FSG taxon který má příznak isFVD a zároveň nemá mapování na žádný Pladias taxon) </span></span></code></pre></div>
+<p>and run <code>docker exec adminpladiascz-app-1 bin/console gbif:austriaOnlyZmizik &gt; output_zmizik.log 2&gt;&amp;1 &amp;</code></p>
+<ol start="6" style="list-style-type: decimal">
 <li><p>restore indexes
 ```sql
 ALTER TABLE IF EXISTS gbif.records
@@ -226,6 +276,10 @@ TABLESPACE pg_default;</p>
 <p>CREATE INDEX IF NOT EXISTS records_institution_code_idx
 ON gbif.records USING btree
 (institution_code COLLATE pg_catalog.”default” ASC NULLS LAST)
+TABLESPACE pg_default;</p>
+<p>CREATE INDEX IF NOT EXISTS records_datasetkey_idx
+ON gbif.records USING btree
+(dataset_key COLLATE pg_catalog.”default” ASC NULLS LAST)
 TABLESPACE pg_default;
 ```</p></li>
 </ol>
