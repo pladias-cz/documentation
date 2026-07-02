@@ -1,0 +1,59 @@
+---
+---
+# Exportsand analysis
+
+## protected taxa counts
+
+```sql
+WITH all_taxa AS (
+    SELECT q.id as quadrant, taxon_id as taxon
+    FROM geodata.quadrants_full q
+             JOIN atlas.records rec
+                  ON ST_Intersects(rec.coords_wgs, q.geom_wgs)
+             JOIN geodata.regions r
+                  ON ST_Intersects(r.geom, q.geom_wgs)
+    WHERE r.id = 3
+      AND EXTRACT(YEAR FROM rec.datum) > 2000
+
+    UNION
+
+    SELECT q.id as quadrant, t.pladias_taxon_id as taxon
+    FROM geodata.quadrants_full q
+             JOIN gbif.records gbif
+                  ON ST_Intersects(gbif.coords, q.geom_wgs)
+             JOIN gbif.taxa t
+                  ON (t.taxon_key = gbif.taxon_key)
+             JOIN geodata.regions r
+                  ON ST_Intersects(r.geom, q.geom_wgs)
+    WHERE r.id = 3
+      AND gbif.year > 2000
+),
+
+     traits AS (
+         SELECT
+             a.quadrant,
+             CASE
+                 WHEN en.succession IN (1,2,3) THEN 'A'
+                 WHEN en.succession BETWEEN 4 AND 6 THEN 'C1'
+                 WHEN en.succession BETWEEN 7 AND 12 THEN 'C2-4'
+                 WHEN en.succession = 13 THEN 'D'
+                 END AS category,
+             COUNT(*) as pocet_druhu
+         FROM all_taxa a
+                  JOIN measurements.data_enum t
+                       ON (t.taxon_id = a.taxon)
+                  JOIN measurements.enumerates_values en
+                       ON (en.id = t.value)
+         WHERE t.trait_id = 5255
+           AND is_enabled = true
+           AND entry_type = 4
+         GROUP BY a.quadrant, en.name_cz,category
+     )
+
+select ST_AsText(qq.geom_wgs) as quad, category, pocet_druhu from traits
+                  JOIN
+              geodata.quadrants_full qq
+              ON (qq.id = quadrant)
+
+-- select * from measurements.enumerates_values where enumerate_id = 32 order by succession
+```

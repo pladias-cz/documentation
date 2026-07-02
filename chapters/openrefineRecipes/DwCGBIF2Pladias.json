@@ -1,0 +1,84 @@
+[
+  {
+    "op": "core/column-addition-by-fetching-urls",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "taxonKey",
+    "urlExpression": "grel:\"https://api.pladias.cz/prest/rpc/gbif2pladias?gbif_id=\" + value",
+    "onError": "set-to-blank",
+    "newColumnName": "pladiasRAW",
+    "columnInsertIndex": 192,
+    "delay": 50,
+    "cacheResponses": true,
+    "httpHeadersJson": [
+      {
+        "name": "authorization",
+        "value": ""
+      },
+      {
+        "name": "if-modified-since",
+        "value": ""
+      },
+      {
+        "name": "accept-language",
+        "value": ""
+      },
+      {
+        "name": "accept-encoding",
+        "value": ""
+      },
+      {
+        "name": "user-agent",
+        "value": "OpenRefine 3.9.0 [TRUNK]"
+      },
+      {
+        "name": "accept",
+        "value": "*/*"
+      },
+      {
+        "name": "accept-charset",
+        "value": ""
+      }
+    ],
+    "description": "Create column pladiasRAW at index 192 by fetching URLs based on column taxonKey using expression grel:\"https://api.pladias.cz/prest/rpc/gbif2pladias?gbif_id=\" + value"
+  },
+  {
+    "op": "core/column-move",
+    "columnName": "pladiasRAW",
+    "index": 0,
+    "description": "Move column pladiasRAW to position 0"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "pladiasRAW",
+    "expression": "grel:value.parseJson()[0][\"pladias_id\"]",
+    "onError": "set-to-blank",
+    "newColumnName": "pladiasID",
+    "columnInsertIndex": 1,
+    "description": "Create column pladiasID at index 1 based on column pladiasRAW using expression grel:value.parseJson()[0][\"pladias_id\"]"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "pladiasRAW",
+    "expression": "grel:value.parseJson()[0][\"pladias_name\"]",
+    "onError": "set-to-blank",
+    "newColumnName": "pladiasName",
+    "columnInsertIndex": 1,
+    "description": "Create column pladiasName at index 1 based on column pladiasRAW using expression grel:value.parseJson()[0][\"pladias_name\"]"
+  },
+  {
+    "op": "core/column-removal",
+    "columnName": "pladiasRAW",
+    "description": "Remove column pladiasRAW"
+  }
+]

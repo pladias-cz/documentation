@@ -2,3 +2,4 @@ _bookdown_files/**
 .RData
 scripts/local.R
 pladias.cz.Rmd
+pladias.cz_files

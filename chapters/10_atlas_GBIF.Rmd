@@ -1,0 +1,234 @@
+---
+---
+# GBIF interactions
+Since 2025, we do show records exported from GBIF in the Pladias internal app, as a point marker accompanied by a link to the specimen info page.
+
+To get the data, this query is used:
+
+[link to the GBIF results](https://www.gbif.org/occurrence/search?has_coordinate=true&has_geospatial_issue=false&taxon_key=7707728&occurrence_status=present&geometry=POLYGON((11.83149%2051.29958,11.66493%2048.09954,19.16497%2048.09965,19.33152%2051.29969,14.64381%2051.29962,11.83149%2051.29958)))
+
+in case of only Zobodat data for FVD: https://www.gbif.org/occurrence/search?has_coordinate=true&has_geospatial_issue=false&taxon_key=7707728&occurrence_status=present&geometry=POLYGON((11.83149%2051.29958,11.66493%2048.09954,19.16497%2048.09965,19.33152%2051.29969,14.64381%2051.29962,11.83149%2051.29958))&dataset_key=857bce66-f762-11e1-a439-00145eb45e9a
+
+- Date of GBIF export: GBIF.org (11 September 2025) GBIF Occurrence Download https://doi.org/10.15468/dl.cperjf
+- Date of GBIF export: GBIF.org (26 November 2025) GBIF Occurrence Download  https://doi.org/10.15468/dl.xamd2m
+- Date of GBIF export: GBIF.org (18 December 2025) GBIF Occurrence Download https://doi.org/10.15468/dl.pf96mm
+- GBIF.org (13 May 2026) GBIF Occurrence Download https://doi.org/10.15468/dl.ayus38
+- GBIF.org (21 May 2026) GBIF Occurrence Download https://doi.org/10.15468/dl.uz285b
+
+
+## Working with GBIF data outside of Pladias
+GBIF data is available in the Pladias database, but not everyone needs this access. Especially for analyses, it is necessary to be able to process an individual export from GBIF and be able to pair it to Pladias taxa using the stored mapping.
+
+A recipe for the OpenRefine tool is available for this purpose:
+
+1) start OpenRefine; for Docker users simply (without data persistency) ```docker run -d -it -p 3333:3333 -e REFINE_MEMORY=8G abesesr/openrefine```, for others please see https://openrefine.org/docs/manual/installing
+2) get data from GBIF in DarwinCore format (the "simple" format can not be used as the taxa mapping is done on original names, not on names interpreted by the Taxonomy Backbone), extract the zip file and take the file occurrence.txt
+2) visit http://127.0.0.1:3333/ and upload the file
+3) "create project", that is check and confirm the data were loaded correctly (check "tabs (TSV)" is selected as a column separator + "Attempt to parse cell text into numbers" is also checked).
+4) switch to Undo/Redo tab and press Apply. When the bellow JSON code is pasted, the OpenRefine will produce a new columns "PladiasId" and "PladiasName" at the very beginning of the matrix. 
+
+```json
+[
+  {
+    "op": "core/column-addition-by-fetching-urls",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "taxonKey",
+    "urlExpression": "grel:\"https://api.pladias.cz/prest/rpc/gbif2pladias?gbif_id=\" + value",
+    "onError": "set-to-blank",
+    "newColumnName": "pladiasRAW",
+    "columnInsertIndex": 192,
+    "delay": 50,
+    "cacheResponses": true,
+    "httpHeadersJson": [
+      {
+        "name": "authorization",
+        "value": ""
+      },
+      {
+        "name": "if-modified-since",
+        "value": ""
+      },
+      {
+        "name": "accept-language",
+        "value": ""
+      },
+      {
+        "name": "accept-encoding",
+        "value": ""
+      },
+      {
+        "name": "user-agent",
+        "value": "OpenRefine 3.9.0 [TRUNK]"
+      },
+      {
+        "name": "accept",
+        "value": "*/*"
+      },
+      {
+        "name": "accept-charset",
+        "value": ""
+      }
+    ],
+    "description": "Create column pladiasRAW at index 192 by fetching URLs based on column taxonKey using expression grel:\"https://api.pladias.cz/prest/rpc/gbif2pladias?gbif_id=\" + value"
+  },
+  {
+    "op": "core/column-move",
+    "columnName": "pladiasRAW",
+    "index": 0,
+    "description": "Move column pladiasRAW to position 0"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "pladiasRAW",
+    "expression": "grel:value.parseJson()[0][\"pladias_id\"]",
+    "onError": "set-to-blank",
+    "newColumnName": "pladiasID",
+    "columnInsertIndex": 1,
+    "description": "Create column pladiasID at index 1 based on column pladiasRAW using expression grel:value.parseJson()[0][\"pladias_id\"]"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "pladiasRAW",
+    "expression": "grel:value.parseJson()[0][\"pladias_name\"]",
+    "onError": "set-to-blank",
+    "newColumnName": "pladiasName",
+    "columnInsertIndex": 1,
+    "description": "Create column pladiasName at index 1 based on column pladiasRAW using expression grel:value.parseJson()[0][\"pladias_name\"]"
+  },
+  {
+    "op": "core/column-removal",
+    "columnName": "pladiasRAW",
+    "description": "Remove column pladiasRAW"
+  }
+]
+```
+
+## How is gbif IMPORT done by @admin
+1) visit the link of the GBIF filter + download as a taxonList and as Simple
+2) using the taxonList export (it has Tab as separator), add new taxa into the convertor or update their info 
+    - filter out names with less than 20 occurrences to reduce it a little bit..
+    - filter out FAMILY rank
+    - replace all ' with ''
+    - fill NULL in V column empty cells
+    - use the Excel formula, that is prepared to be in the first, newly pasted column
+   ```
+   ="INSERT INTO gbif.taxa (taxon_key, scientific_name, accepted_taxon_key, accepted_scientific_name, taxon_rank, species, species_key)
+   VALUES
+   ("&B2&",'"&C2&"',"&D2&",'"&E2&"','"&G2&"','"&U2&"',"&V2&")
+   ON CONFLICT (taxon_key)
+   DO UPDATE SET
+    accepted_taxon_key = EXCLUDED.accepted_taxon_key,
+    accepted_scientific_name = EXCLUDED.accepted_scientific_name,
+    taxon_rank = EXCLUDED.taxon_rank,
+    species = EXCLUDED.species,
+    species_key = EXCLUDED.species_key
+    ;"
+   ```
+3) cleanup & truncate records table:
+    ```sql
+     ALTER TABLE IF EXISTS gbif.records DROP CONSTRAINT IF EXISTS gbif_records_taxon_fkey;
+      DROP INDEX IF EXISTS gbif.gbif_records_coords_idx;
+      DROP INDEX IF EXISTS gbif.gbif_records_taxon_key_idx;
+      DROP INDEX IF EXISTS gbif.gbif_records_year_idx;
+      DROP INDEX IF EXISTS gbif.records_institution_code_idx;
+      DROP INDEX IF EXISTS gbif.records_datasetkey_idx;
+
+      TRUNCATE TABLE gbif.records RESTART IDENTITY;
+    ```
+4) upload occurrences from Simple on megastroj, import records.csv via admin.pladias.cz Console 
+   ```shell 
+   wget .... \
+   && unzip xx.zip \
+   && mv xx.txt original.csv \
+   && docker cp original.csv adminpladiascz-app-1:/srv/temp/data/original.csv```
+3) the source file might be too large to be loaded into the database via exsting scripts, split it inside container into chunks and load them one by one.:   
+   ```shell
+   head -n 1 original.csv > header.txt
+   tail -n +2 original.csv | split -l 4000000 - records_part_
+   for f in records_part_*; do
+    cat header.txt "$f" > "${f}.csv"
+   done
+   rm records_part_aa records_part_ab records_part_ac ..
+   # or analyse subset of records
+   grep -n '4850325690' records.csv
+   (head -n 1 records.csv && sed -n '6563620,6563635p' records.csv) > vyrez.csv
+    
+   ```
+4)  import chunks via admin.pladias.cz Console ```nohup docker exec adminpladiascz-app-1 bin/console gbif:importRecords > output.log 2>&1 &```.
+5) limit precision (DO NOT prefilter during GBIF export - some records have no uncertainty specified and would be excluded) ```DELETE FROM gbif.records WHERE coords_precision > 10000; ```
+5) we fake GBIF taxa to solve missing aggregates rank: there are some manualy introduced taxa with taxonKey>=10^9 in the gbif.taxa table, we want to update their records with the faked taxon_key values 
+ how many are there
+ ```sql 
+   SELECT count(*) FROM gbif.records r
+   WHERE r.taxon_rank = 'GENUS'
+   AND r.verbatim_scientific_name LIKE '% agg.'
+   AND exists (SELECT t.id FROM gbif.taxa t WHERE t.taxon_key >= 1000000000 AND t.scientific_name = r.verbatim_scientific_name) 
+   ```
+
+ ```sql 
+   UPDATE gbif.records r
+   SET taxon_key = t.taxon_key
+   FROM gbif.taxa t
+   WHERE r.taxon_rank = 'GENUS'
+   AND r.verbatim_scientific_name LIKE '% agg.%'
+   AND t.taxon_key >= 1000000000
+   AND t.scientific_name = r.verbatim_scientific_name; 
+   ```
+5) to fulfill foreignKey and not store balast, remove records those are not mapped ```sql DELETE FROM gbif.records r WHERE NOT EXISTS (SELECT 1 FROM gbif.taxa t WHERE t.taxon_key = r.taxon_key); ```
+6) austria-only taxa require more magic
+  ```sql
+   SELECT name_lat FROM bayernflora.taxons_fsg t
+   WHERE t.is_fvd = true
+     AND NOT EXISTS (SELECT 1 FROM bayernflora.taxons_convertor c WHERE c.fsg_taxon_id = t.id AND pladias_taxon IS NOT NULL )
+     AND EXISTS (SELECT 1 FROM gbif.taxa g WHERE g.species = t.name_lat)
+     AND EXISTS (SELECT 1 FROM gbif.taxa g WHERE  g.accepted_scientific_name LIKE t.name_lat|| '%')
+   ORDER BY t.name_lat ASC
+
+--(FSG taxon který má příznak isFVD a zároveň nemá mapování na žádný Pladias taxon) 
+   ``` 
+ and run ```docker exec adminpladiascz-app-1 bin/console gbif:austriaOnlyZmizik > output_zmizik.log 2>&1 &```
+
+6) restore indexes
+    ```sql
+   ALTER TABLE IF EXISTS gbif.records
+   ADD CONSTRAINT gbif_records_taxon_fkey FOREIGN KEY (taxon_key)
+   REFERENCES gbif.taxa (taxon_key) MATCH SIMPLE
+   ON UPDATE NO ACTION
+   ON DELETE CASCADE;
+
+   CREATE INDEX IF NOT EXISTS gbif_records_coords_idx
+   ON gbif.records USING gist
+   (coords)
+   TABLESPACE pg_default;
+
+   CREATE INDEX IF NOT EXISTS gbif_records_taxon_key_idx
+   ON gbif.records USING btree
+   (taxon_key ASC NULLS LAST)
+   TABLESPACE pg_default;
+
+   CREATE INDEX IF NOT EXISTS gbif_records_year_idx
+   ON gbif.records USING btree
+   (year ASC NULLS LAST)
+   TABLESPACE pg_default;
+
+   CREATE INDEX IF NOT EXISTS records_institution_code_idx
+   ON gbif.records USING btree
+   (institution_code COLLATE pg_catalog."default" ASC NULLS LAST)
+   TABLESPACE pg_default;
+   
+   CREATE INDEX IF NOT EXISTS records_datasetkey_idx
+   ON gbif.records USING btree
+   (dataset_key COLLATE pg_catalog."default" ASC NULLS LAST)
+   TABLESPACE pg_default;
+    ```

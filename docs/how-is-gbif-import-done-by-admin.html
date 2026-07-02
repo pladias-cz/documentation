@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Page not found | Pladias.cz documentation</title>
-  <meta name="description" content="Page not found | Pladias.cz documentation" />
+  <title>4.2 How is gbif IMPORT done by @admin | Pladias.cz documentation</title>
+  <meta name="description" content="4.2 How is gbif IMPORT done by @admin | Pladias.cz documentation" />
   <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Page not found | Pladias.cz documentation" />
+  <meta property="og:title" content="4.2 How is gbif IMPORT done by @admin | Pladias.cz documentation" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Page not found | Pladias.cz documentation" />
+  <meta name="twitter:title" content="4.2 How is gbif IMPORT done by @admin | Pladias.cz documentation" />
   
   
   
@@ -30,7 +30,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
+<link rel="prev" href="working-with-gbif-data-outside-of-pladias.html"/>
 
 <script src="assets/jquery-3.6.1/jquery-3.6.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -177,18 +177,67 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="page-not-found" class="section level1">
-<h1>Page not found</h1>
-<p>The page you requested cannot be found (perhaps it was moved or renamed).</p>
-<p>You may want to try searching to find the page's new location, or use
-the table of contents to find the page you are looking for.</p>
+<div id="how-is-gbif-import-done-by-admin" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> How is gbif IMPORT done by <span class="citation">@admin</span><a href="how-is-gbif-import-done-by-admin.html#how-is-gbif-import-done-by-admin" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li><p>visit the link of the GBIF filter + download as a taxonList and as Simple</p></li>
+<li><p>using the taxonList export (it has Tab as separator), add new taxa into the convertor or update their info</p>
+<ul>
+<li>filter out names with less than 20 occurrences to reduce it a little bit..</li>
+<li>filter out FAMILY rank</li>
+<li>replace all ’ with ’’</li>
+<li>fill NULL in V column empty cells</li>
+<li>use the Excel formula, that is prepared to be in the first, newly pasted column</li>
+</ul>
+<pre><code>=&quot;INSERT INTO gbif.taxa (taxon_key, scientific_name, accepted_taxon_key, accepted_scientific_name, taxon_rank, species, species_key)
+VALUES
+(&quot;&amp;B2&amp;&quot;,&#39;&quot;&amp;C2&amp;&quot;&#39;,&quot;&amp;D2&amp;&quot;,&#39;&quot;&amp;E2&amp;&quot;&#39;,&#39;&quot;&amp;G2&amp;&quot;&#39;,&#39;&quot;&amp;U2&amp;&quot;&#39;,&quot;&amp;V2&amp;&quot;)
+ON CONFLICT (taxon_key)
+DO UPDATE SET
+ accepted_taxon_key = EXCLUDED.accepted_taxon_key,
+ accepted_scientific_name = EXCLUDED.accepted_scientific_name,
+ taxon_rank = EXCLUDED.taxon_rank,
+ species = EXCLUDED.species,
+ species_key = EXCLUDED.species_key
+ ;&quot;</code></pre></li>
+<li><p>cleanup &amp; truncate table:
+<code>sql      ALTER TABLE IF EXISTS gbif.records DROP CONSTRAINT IF EXISTS gbif_records_taxon_fkey;       DROP INDEX IF EXISTS gbif.gbif_records_coords_idx;       DROP INDEX IF EXISTS gbif.gbif_records_taxon_key_idx;       DROP INDEX IF EXISTS gbif.gbif_records_year_idx;       DROP INDEX IF EXISTS gbif.records_institution_code_idx;       TRUNCATE TABLE gbif.records RESTART IDENTITY;</code></p></li>
+<li><p>upload occurrences from Simple on megastroj, import records.csv via admin.pladias.cz Console <code>docker cp ./data/records.csv adminpladiascz-app-1:/srv/temp/data/records.csv   &amp;&amp;  nohup docker exec adminpladiascz-app-1 bin/console gbif:importRecords &gt; output.log 2&gt;&amp;1 &amp;</code></p></li>
+<li><p>due foreignKey remove records those are not mapped <code>sql DELETE FROM gbif.records r WHERE NOT EXISTS (SELECT 1 FROM gbif.taxa t WHERE t.taxon_key = r.taxon_key);</code></p></li>
+<li><p>restore indexes
+```sql
+ALTER TABLE IF EXISTS gbif.records
+ADD CONSTRAINT gbif_records_taxon_fkey FOREIGN KEY (taxon_key)
+REFERENCES gbif.taxa (taxon_key) MATCH SIMPLE
+ON UPDATE NO ACTION
+ON DELETE CASCADE;</p>
+<p>CREATE INDEX IF NOT EXISTS gbif_records_coords_idx
+ON gbif.records USING gist
+(coords)
+TABLESPACE pg_default;</p>
+<p>CREATE INDEX IF NOT EXISTS gbif_records_taxon_key_idx
+ON gbif.records USING btree
+(taxon_key ASC NULLS LAST)
+TABLESPACE pg_default;</p>
+<p>CREATE INDEX IF NOT EXISTS gbif_records_year_idx
+ON gbif.records USING btree
+(year ASC NULLS LAST)
+TABLESPACE pg_default;</p>
+<p>CREATE INDEX IF NOT EXISTS records_institution_code_idx
+ON gbif.records USING btree
+(institution_code COLLATE pg_catalog.”default” ASC NULLS LAST)
+TABLESPACE pg_default;
+```</p></li>
+</ol>
+
 </div>
+<!-- </div> -->
             </section>
 
           </div>
         </div>
       </div>
-
+<a href="working-with-gbif-data-outside-of-pladias.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
     </div>
   </div>
