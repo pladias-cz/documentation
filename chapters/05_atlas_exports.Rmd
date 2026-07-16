@@ -57,7 +57,7 @@ SELECT
     (
         SELECT quadrants_full.code
         FROM geodata.quadrants_full
-        WHERE st_within(records.coords_wgs, quadrants_full.geom_wgs) LIMIT 1) AS kvadrant,
+        WHERE st_intersects(records.coords_wgs, quadrants_full.geom_wgs) LIMIT 1) AS kvadrant,
     records.comment AS poznamka,
     record_validation_status.description AS validacni_status,
     record_originality_status.name_cz AS originalita,
