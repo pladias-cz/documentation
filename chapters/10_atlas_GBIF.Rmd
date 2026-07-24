@@ -5,16 +5,16 @@ Since 2025, we do show records exported from GBIF in the Pladias internal app, a
 
 To get the data, this query is used:
 
-[link to the GBIF results](https://www.gbif.org/occurrence/search?has_coordinate=true&has_geospatial_issue=false&taxon_key=7707728&occurrence_status=present&geometry=POLYGON((11.83149%2051.29958,11.66493%2048.09954,19.16497%2048.09965,19.33152%2051.29969,14.64381%2051.29962,11.83149%2051.29958)))
+[link to the GBIF results](https://www.gbif.org/occurrence/search?hasCoordinate=true&hasGeospatialIssue=false&occurrenceStatus=present&geometry=POLYGON%28%2811.83149+51.29958%2C11.66493+48.09954%2C19.16497+48.09965%2C19.33152+51.29969%2C14.64381+51.29962%2C11.83149+51.29958%29%29&taxonKey=TP)
 
-in case of only Zobodat data for FVD: https://www.gbif.org/occurrence/search?has_coordinate=true&has_geospatial_issue=false&taxon_key=7707728&occurrence_status=present&geometry=POLYGON((11.83149%2051.29958,11.66493%2048.09954,19.16497%2048.09965,19.33152%2051.29969,14.64381%2051.29962,11.83149%2051.29958))&dataset_key=857bce66-f762-11e1-a439-00145eb45e9a
+in case of only Zobodat data for FVD: https://www.gbif.org/occurrence/search?hasCoordinate=true&hasGeospatialIssue=false&occurrenceStatus=present&geometry=POLYGON%28%2811.83149+51.29958%2C11.66493+48.09954%2C19.16497+48.09965%2C19.33152+51.29969%2C14.64381+51.29962%2C11.83149+51.29958%29%29&datasetKey=857bce66-f762-11e1-a439-00145eb45e9a&taxonKey=TP
 
 - Date of GBIF export: GBIF.org (11 September 2025) GBIF Occurrence Download https://doi.org/10.15468/dl.cperjf
 - Date of GBIF export: GBIF.org (26 November 2025) GBIF Occurrence Download  https://doi.org/10.15468/dl.xamd2m
 - Date of GBIF export: GBIF.org (18 December 2025) GBIF Occurrence Download https://doi.org/10.15468/dl.pf96mm
 - GBIF.org (13 May 2026) GBIF Occurrence Download https://doi.org/10.15468/dl.ayus38
 - GBIF.org (21 May 2026) GBIF Occurrence Download https://doi.org/10.15468/dl.uz285b
-
+- GBIF.org (23 July 2026) GBIF Occurrence Download https://doi.org/10.15468/dl.sjscuc
 
 ## Working with GBIF data outside of Pladias
 GBIF data is available in the Pladias database, but not everyone needs this access. Especially for analyses, it is necessary to be able to process an individual export from GBIF and be able to pair it to Pladias taxa using the stored mapping.
