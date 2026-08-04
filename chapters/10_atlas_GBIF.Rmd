@@ -151,23 +151,11 @@ A recipe for the OpenRefine tool is available for this purpose:
    wget .... \
    && unzip xx.zip \
    && mv xx.txt original.csv \
-   && docker cp original.csv adminpladiascz-app-1:/srv/temp/data/original.csv```
-3) the source file might be too large to be loaded into the database via exsting scripts, split it inside container into chunks and load them one by one.:   
-   ```shell
-   head -n 1 original.csv > header.txt
-   tail -n +2 original.csv | split -l 4000000 - records_part_
-   for f in records_part_*; do
-    cat header.txt "$f" > "${f}.csv"
-   done
-   rm records_part_aa records_part_ab records_part_ac ..
-   # or analyse subset of records
-   grep -n '4850325690' records.csv
-   (head -n 1 records.csv && sed -n '6563620,6563635p' records.csv) > vyrez.csv
-    
-   ```
-4)  import chunks via admin.pladias.cz Console ```nohup docker exec adminpladiascz-app-1 bin/console gbif:importRecords > output.log 2>&1 &```.
-5) limit precision (DO NOT prefilter during GBIF export - some records have no uncertainty specified and would be excluded) ```DELETE FROM gbif.records WHERE coords_precision > 10000; ```
-5) we fake GBIF taxa to solve missing aggregates rank: there are some manualy introduced taxa with taxonKey>=10^9 in the gbif.taxa table, we want to update their records with the faked taxon_key values 
+   && docker exec adminpladiascz-app-1 mkdir -p /srv/temp/data \
+   && docker cp original.csv adminpladiascz-app-1:/srv/temp/data/records.csv```
+5) import chunks via admin.pladias.cz Console ```nohup docker exec adminpladiascz-app-1 bin/console gbif:importRecords > output.log 2>&1 &```.
+6) limit precision (DO NOT prefilter during GBIF export - some records have no uncertainty specified and would be excluded) ```DELETE FROM gbif.records WHERE coords_precision > 10000; ```
+7) we fake GBIF taxa to solve missing aggregates rank: there are some manualy introduced taxa with taxonKey>=10^9 in the gbif.taxa table, we want to update their records with the faked taxon_key values 
  how many are there
  ```sql 
    SELECT count(*) FROM gbif.records r
@@ -212,9 +200,9 @@ A recipe for the OpenRefine tool is available for this purpose:
    (coords)
    TABLESPACE pg_default;
 
-   CREATE INDEX IF NOT EXISTS gbif_records_taxon_key_idx
+   CREATE INDEX IF NOT EXISTS gbif_records_col_id_idx
    ON gbif.records USING btree
-   (taxon_key ASC NULLS LAST)
+   (col_id ASC NULLS LAST)
    TABLESPACE pg_default;
 
    CREATE INDEX IF NOT EXISTS gbif_records_year_idx
