@@ -154,26 +154,30 @@ A recipe for the OpenRefine tool is available for this purpose:
    && docker exec adminpladiascz-app-1 mkdir -p /srv/temp/data \
    && docker cp original.csv adminpladiascz-app-1:/srv/temp/data/records.csv```
 5) import chunks via admin.pladias.cz Console ```nohup docker exec adminpladiascz-app-1 bin/console gbif:importRecords > output.log 2>&1 &```.
-6) limit precision (DO NOT prefilter during GBIF export - some records have no uncertainty specified and would be excluded) ```DELETE FROM gbif.records WHERE coords_precision > 10000; ```
+6) limit precision (DO NOT prefilter during GBIF export - some records have no uncertainty specified and would be excluded) ```DELETE FROM gbif.records WHERE coords_precision > 5000; ```
 7) we fake GBIF taxa to solve missing aggregates rank: there are some manualy introduced taxa with taxonKey>=10^9 in the gbif.taxa table, we want to update their records with the faked taxon_key values 
  how many are there
  ```sql 
-   SELECT count(*) FROM gbif.records r
-   WHERE r.taxon_rank = 'GENUS'
-   AND r.verbatim_scientific_name LIKE '% agg.'
-   AND exists (SELECT t.id FROM gbif.taxa t WHERE t.taxon_key >= 1000000000 AND t.scientific_name = r.verbatim_scientific_name) 
+ SELECT count(*) FROM gbif.taxa t
+                  JOIN gbif.records r  ON (t.scientific_name = r.verbatim_scientific_name)
+ WHERE r.taxon_rank = 'GENUS'
+   AND r.verbatim_scientific_name LIKE '% agg.%'
+   AND t.col_id ~ '^\d+$'
+  AND t.col_id::bigint >= 1000000000
+;
    ```
 
  ```sql 
    UPDATE gbif.records r
-   SET taxon_key = t.taxon_key
+   SET taxon_col_id = t.col_id
    FROM gbif.taxa t
    WHERE r.taxon_rank = 'GENUS'
    AND r.verbatim_scientific_name LIKE '% agg.%'
-   AND t.taxon_key >= 1000000000
+     AND t.col_id ~ '^\d+$'
+     AND t.col_id::bigint >= 1000000000
    AND t.scientific_name = r.verbatim_scientific_name; 
    ```
-5) to fulfill foreignKey and not store balast, remove records those are not mapped ```sql DELETE FROM gbif.records r WHERE NOT EXISTS (SELECT 1 FROM gbif.taxa t WHERE t.taxon_key = r.taxon_key); ```
+5) to fulfill foreignKey and not store balast, remove records those are not mapped ```sql DELETE FROM gbif.records r WHERE NOT EXISTS (SELECT 1 FROM gbif.taxa t WHERE t.col_id = r.taxon_col_id); ```
 6) austria-only taxa require more magic
   ```sql
    SELECT name_lat FROM bayernflora.taxons_fsg t
@@ -190,8 +194,8 @@ A recipe for the OpenRefine tool is available for this purpose:
 6) restore indexes
     ```sql
    ALTER TABLE IF EXISTS gbif.records
-   ADD CONSTRAINT gbif_records_taxon_fkey FOREIGN KEY (taxon_key)
-   REFERENCES gbif.taxa (taxon_key) MATCH SIMPLE
+   ADD CONSTRAINT gbif_records_taxon_fkey FOREIGN KEY (taxon_col_id)
+   REFERENCES gbif.taxa (col_id) MATCH SIMPLE
    ON UPDATE NO ACTION
    ON DELETE CASCADE;
 
@@ -200,9 +204,9 @@ A recipe for the OpenRefine tool is available for this purpose:
    (coords)
    TABLESPACE pg_default;
 
-   CREATE INDEX IF NOT EXISTS gbif_records_col_id_idx
+   CREATE INDEX IF NOT EXISTS gbif_records_taxon_col_id_idx
    ON gbif.records USING btree
-   (col_id ASC NULLS LAST)
+   (taxon_col_id ASC NULLS LAST)
    TABLESPACE pg_default;
 
    CREATE INDEX IF NOT EXISTS gbif_records_year_idx
