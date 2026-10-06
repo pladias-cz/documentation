@@ -119,15 +119,14 @@ A recipe for the OpenRefine tool is available for this purpose:
 1) visit the link of the GBIF filter + download as a taxonList and as Simple
 2) using the taxonList export (it has Tab as separator), add new taxa into the convertor or update their info 
     - filter out names with less than 20 occurrences to reduce it a little bit..
-    - filter out FAMILY rank
-    - replace all ' with ''
-    - fill NULL in V column empty cells
+    - filter out FAMILY and other high ranks
+    - replace all ' with '' 
     - use the Excel formula, that is prepared to be in the first, newly pasted column
    ```
-   ="INSERT INTO gbif.taxa (taxon_key, scientific_name, accepted_taxon_key, accepted_scientific_name, taxon_rank, species, species_key)
+   ="INSERT INTO gbif.taxa (col_id, scientific_name, accepted_taxon_key, accepted_scientific_name, taxon_rank, species, species_key)
    VALUES
-   ("&B2&",'"&C2&"',"&D2&",'"&E2&"','"&G2&"','"&U2&"',"&V2&")
-   ON CONFLICT (taxon_key)
+   ('"&B2&"','"&C2&"','"&D2&"','"&E2&"','"&G2&"','"&U2&"','"&V2&"')
+   ON CONFLICT (col_id)
    DO UPDATE SET
     accepted_taxon_key = EXCLUDED.accepted_taxon_key,
     accepted_scientific_name = EXCLUDED.accepted_scientific_name,
