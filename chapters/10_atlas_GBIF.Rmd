@@ -15,6 +15,7 @@ in case of only Zobodat data for FVD: https://www.gbif.org/occurrence/search?has
 - GBIF.org (13 May 2026) GBIF Occurrence Download https://doi.org/10.15468/dl.ayus38
 - GBIF.org (21 May 2026) GBIF Occurrence Download https://doi.org/10.15468/dl.uz285b
 - GBIF.org (23 July 2026) GBIF Occurrence Download https://doi.org/10.15468/dl.sjscuc
+- GBIF.org (6 October 2026) GBIF Occurrence Download https://doi.org/10.15468/dl.n6kt6v
 
 ## Working with GBIF data outside of Pladias
 GBIF data is available in the Pladias database, but not everyone needs this access. Especially for analyses, it is necessary to be able to process an individual export from GBIF and be able to pair it to Pladias taxa using the stored mapping.
