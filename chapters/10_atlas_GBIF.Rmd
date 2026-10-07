@@ -184,7 +184,7 @@ A recipe for the OpenRefine tool is available for this purpose:
    WHERE t.is_fvd = true
      AND NOT EXISTS (SELECT 1 FROM bayernflora.taxons_convertor c WHERE c.fsg_taxon_id = t.id AND pladias_taxon IS NOT NULL )
      AND EXISTS (SELECT 1 FROM gbif.taxa g WHERE g.species = t.name_lat)
-     AND EXISTS (SELECT 1 FROM gbif.taxa g WHERE  g.accepted_scientific_name LIKE t.name_lat|| '%')
+     -- AND EXISTS (SELECT 1 FROM gbif.taxa g WHERE  g.accepted_scientific_name LIKE t.name_lat|| '%')
    ORDER BY t.name_lat ASC
 
 --(FSG taxon který má příznak isFVD a zároveň nemá mapování na žádný Pladias taxon) 
