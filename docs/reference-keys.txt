@@ -15,3 +15,11 @@ occurrence-status-including-aggregated-descendant-taxa-parent_id-is-the-taxon-to
 gbif-interactions
 working-with-gbif-data-outside-of-pladias
 how-is-gbif-import-done-by-admin
+inaturalist-interactions
+filter
+harvested-data-fields
+taxonomy-mapping
+interactions
+presentation
+pladias.cz
+pladias.ibot.cas.cz
