@@ -1,0 +1,68 @@
+---
+---
+# iNaturalist interactions
+Since 2026, we do show records exported from iNaturalist project 'Česká flóra: projekt České botanické společnosti' in the Pladias internal app, as a point marker accompanied by a link to the specimen info page.
+Tyto záznamy nejsou plně importovány do Pladias ale pracujeme s nimi obdobně jako s GBIF - zobrazujeme je z naší lokální cache která se cyklicky aktualizuje. Narozdíl od GBIF data jsou ale tyto zahrnuty i do veřejné prezentace pladias.cz. Harvest probíhá přes iNat uživatele krkabol(Petr Novotný) a "OAuth aplikaci" Pladias importer (Jiří Danihelka). Účet krkabol který má práva správce projektu a tedy i přístup ke skrytým souřadnicím uživatelů kteří k tomu projektu udělli souhlas.
+
+Frekvence update cache je jeden týden.
+
+## Filter
+Z filtrů dostupných na https://api.inaturalist.org/v2/docs/#/Observations/get_observations aplikujeme tyto
+
+- geo=true (has position)
+- acc_below < 500m
+- verifiable = true (have quality grades research or needs_id) vs ?quality_grade
+- project_id = 183334  (=ČBS projekt)
+- licence = [CC0, CC BY, CC-BY NC] in line with https://help.inaturalist.org/en/support/solutions/articles/151000170346
+- captive = false
+
+**MŠ:**
+U verifiable bych asi nedával jen "true". Nevím, přesně, co to znamená. Dal bych tam to "research". Předpokládám, že "needs_id" by spadalo taky do atributu "true". V normálním iNaturalistu se tam takhle může objevit spousta věcí, který by se měly ještě přeurčit. Možná když dáš podmínku projektu, tak v něm jsou už lidi, který tolik nedělají a budeš tak přicházet o údaje,  který zatím nikdo neodklikl. Myslím ale, že správci se snaží a odklikávají poctivě, takže bych možná zůstal na research. Mám dojem, že se říkalo, že GBIF bere taky jen research úroveň. Nebo se pletu?
+
+Pak jsem chtěl napsat, že by se captive = yes přímo vyloučilo, ale pokud bys byl schopen oddělit to barvou, tak by to smysl dávat mohlo. Ovšem standardně do Pladiasu pěstovaný kytky nedáváme. Měly by bejt už zplanělý.
+
+U ranku bych nechal všechno, protože předpokládám, že v rámci projektu tam budou jen smysluplný věci a stejně u taxon_ID vy v projektu ČBS měly bejt jen kytky. Aspň si to tak představuju.
+
+Zrovna to pěstování nebo přesnost lokalizace mi přijde, že je k diskusi a dohodě (např. pokud přesnost, tak jaká vzdálenost)
+
+## Harvested data fields
+- id
+- observed_on
+- created_at
+- species_guess
+- quality_grade
+- taxon:(id,name,rank)
+- user:(id,login, fullname)
+- positional_accuracy
+- latitude
+- longitude
+- introduced
+- captive
+- geojson + private_geojson
+- location + private_location
+
+## Taxonomy mapping
+Milan Štech spravuje mapování Pladias - GBIF (with Catalogue of Life used to populate the taxonomic columns), mapování tedy probíhá iNatTaxon->ChecklistBank API->CoLTaxon->náš převodník -> PladiasTaxon  
+
+https://forum.inaturalist.org/t/where-does-the-inat-gbif-taxonomy-cross-reference-live/35372/5
+
+## Interactions
+Data která importujeme z GBIF zahrnují i záznamy iNaturalist, tyto zároveň neobsahují informaci o tom z kterého projektu pocházejí (mohou být i ve více atp), dochází tak k duplikování informací; u *obscured* záznamů pak i nesrozumitelnosti dvou odlišných lokalit (veřejná via GBIF vs reálná via iNaturalist API). Součástí importního procesu je tak i vzájemná interakce těchto dat - z GBIF cache mažeme všechny záznamy které přicházejí z iNaturalist importu (detekováno přes shodu inaturalist:occurrenceID | gbif:CatalogueNumber + gbif:occurrenceID) 
+
+## Presentation
+### pladias.cz
+např. https://pladias.cz/taxon/distribution/Arnica%20montana
+tři typy zobrazení:
+- základní - přimaluje se žlutou barvou pod stávají vrstvy
+- revize - přimaluje se žlutou barvou nad šedou
+- časová - zakomponuje se do současných barev
+
+nebude se zobrazovat ve výpisu nálezů z daného čtverce (abychom nemuseli řešit privátní/obscured - např. situaci kdy to na iNat změní a ještě se u nás neaktualizovala cache)
+
+### pladias.ibot.cas.cz
+
+https://pladias.dyn.cloud.e-infra.cz/atlas/mapMain/1696
+- přidá se vrstva do skupiny GBIF se žlutou (?kontrast)/hnědou šrafou
+
+https://pladias.dyn.cloud.e-infra.cz/atlas/mapDetail/1696/7153
+- do výpisu záznamů se přidá další roletka "iNaturalist ČBS", žlutohnědé puntíky

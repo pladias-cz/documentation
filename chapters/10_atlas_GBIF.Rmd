@@ -191,7 +191,7 @@ A recipe for the OpenRefine tool is available for this purpose:
    ``` 
  and run ```docker exec adminpladiascz-app-1 bin/console gbif:austriaOnlyZmizik > output_zmizik.log 2>&1 &```
 
-6) restore indexes
+7) restore indexes
     ```sql
    ALTER TABLE IF EXISTS gbif.records
    ADD CONSTRAINT gbif_records_taxon_fkey FOREIGN KEY (taxon_col_id)
@@ -224,3 +224,5 @@ A recipe for the OpenRefine tool is available for this purpose:
    (dataset_key COLLATE pg_catalog."default" ASC NULLS LAST)
    TABLESPACE pg_default;
     ```
+
+8) TODO - delete records already present in iNaturalist ČBS data
